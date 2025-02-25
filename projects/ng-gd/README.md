@@ -16,6 +16,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 4.0.0               | 19.1.4      |
 | 3.4.0               | 19.1.4      |
 | 3.0.2               | 18.2        |
 | 3.0.0               | 18          |
@@ -184,9 +185,32 @@ If you have problems with go another page and return use after view init for ref
 **click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }** Return a array all objects are clicked with mouse order for ZOrder.
 Possible events off object.
 
-## inPoint Object are clicked.
+## ShapeObject type posibles values
+**label**
 
-### Line and connection private events
+**node**
+
+**connection**
+
+**rectangle**
+
+**circle**
+
+**triangle**
+
+**multiplesSides**
+
+**line**
+
+**arc**
+
+**lineChart**
+
+**candleStick**
+
+## inPoint Object are clicked event value.
+
+### Line and connection private events values.
 
 **inPointXY Object clicked in first point.**
 
@@ -351,7 +375,7 @@ use common in  hotlistenner read this sample code
   }
   ```
 
-sources:**https://github.com/luisalejandrofigueredo/ng-gd**
+sources:(https://github.com/luisalejandrofigueredo/ng-gd)
 For help send email to:**luisalejandrofigueredo@gmail.com**
 or:[Likedin](http://www.linkedin.com/in/luis-figueredo-casadei)
 
