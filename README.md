@@ -3,6 +3,7 @@
 The easy way to manage the canvas.
 Support object and clicks with mouse or tablet events to the objects
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) Angular 17
+**chat GPT implementation in curse.**
 
 ## Build
 
@@ -11,6 +12,19 @@ Run `ng build ng-gd` to build the lib. The build artifacts will be stored in the
 ## Publishing
 
 After building your library with `ng build ng-gd`, go to the dist folder `cd dist/ng-gd` and run `npm publish`.
+
+***Features***
+
+🎨 Manage objects in canvas with event detection (clicks, touch, etc.).
+
+📊 Support for bar charts, line charts, and candlestick charts.
+
+🎭 Light and dark mode support.
+
+📌 Event detection and layer management with ZOrder.
+
+🖥️ Optimized for mouse and tablet interactions.
+
 
 ## Versions
 
@@ -182,8 +196,11 @@ If you have problems with go another page and return use after view init for ref
 
 **addArc(x: number, y: number, size: number, beginGrades: number, endGrades: number, color?: string| CanvasGradient | CanvasPattern, borderColor?: string| CanvasGradient | CanvasPattern,shadow?:boolean): ArcObject** Create a arc object
 
-**click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }** Return a array all objects are clicked with mouse order for ZOrder.
+**click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }**
+** Return a array all objects are clicked with mouse order for ZOrder. **
 Possible events off object.
+const clickedObjects = ngGdService.click(ctx, event);
+console.log(clickedObjects);
 
 
 ## ShapeObject posibles values in type
