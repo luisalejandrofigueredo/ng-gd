@@ -1,6 +1,6 @@
 {
   "name": "ng-gd",
-  "version": "0.3.6",
+  "version": "3.8.0",
   "keywords": [
     "canvas",
     "Angular",
@@ -20,10 +20,13 @@
   },
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common":  "^19.1.4",
-    "@angular/core":  "^19.1.4"
+    "@angular/common": "^19.1.6",
+    "@angular/core": "^19.1.6"
   },
   "dependencies": {
+    "@angular-devkit/build-angular": "^19.1.8",
+    "@angular/cli": "^19.1.8",
+    "ng-packagr": "^19.1.2",
     "tslib": "^2.3.0"
   },
   "sideEffects": false

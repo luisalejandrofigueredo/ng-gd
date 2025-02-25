@@ -16,6 +16,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 0.4.0               | 19.14
 | 3.0.4               | 19.1.4      |
 | 3.0.2               | 18.2        |
 | 3.0.0               | 18          |
@@ -349,6 +350,8 @@ use common in  hotlistenner read this sample code
       }
     }
   }
+  ```
+sources:**https://github.com/luisalejandrofigueredo/ng-gd**
 For help send email to:**luisalejandrofigueredo@gmail.com**
 or:[Likedin](http://www.linkedin.com/in/luis-figueredo-casadei)
 

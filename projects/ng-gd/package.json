@@ -1,9 +1,23 @@
 {
   "name": "ng-gd",
-  "version": "0.0.1",
+  "version": "3.8.0",
+  "license": "MIT",
+  "keywords": [
+    "canvas",
+    "Angular",
+    "Front-end",
+    "Angular 15",
+    "Angular 16",
+    "Angular 17",
+    "Angular 18",
+    "Angular 19",
+    "",
+    "Dashboard",
+    "Graphics"
+  ],
   "peerDependencies": {
-    "@angular/common": "^19.1.0",
-    "@angular/core": "^19.1.0"
+    "@angular/common": "^19.1.4",
+    "@angular/core": "^19.1.4"
   },
   "dependencies": {
     "tslib": "^2.3.0"

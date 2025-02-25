@@ -8,7 +8,7 @@ describe('NgGdComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgGdComponent]
+      declarations: [ NgGdComponent ]
     })
     .compileComponents();
 

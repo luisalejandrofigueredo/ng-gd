@@ -1,63 +1,358 @@
 # NgGd
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.0.
+The easy way to manage the canvas.
+Support object and clicks with mouse or tablet events to the objects
+This library was generated with [Angular CLI](https://github.com/angular/angular-cli) Angular 17
 
-## Code scaffolding
+## Build
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Run `ng build ng-gd` to build the lib. The build artifacts will be stored in the `dist/` directory.
 
-```bash
-ng generate component component-name
+## Publishing
+
+After building your library with `ng build ng-gd`, go to the dist folder `cd dist/ng-gd` and run `npm publish`.
+
+## Versions
+
+| **Library version** | **Angular** |
+| ------------------- | ----------- |
+| 3.4.0               | 19.1.4      |
+| 3.0.2               | 18.2        |
+| 3.0.0               | 18          |
+| 2.0.8               | 17          |
+| 2.0.0               | 15, 15.2    |
+
+
+
+
+*Feature shadow in objects.
+
+## Usage
+
+### install the lib
+
+npm i ng-gd
+
+### declare in a module program
+
+```typescript
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+
+import { AppComponent } from "./app.component";
+import { NgGdService } from "ng-gd";
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [NgGdService],
+  bootstrap: [AppComponent],
+})
+export class AppModule {}
+```
+or in th component Angula 17 or more
+```typescript
+import { Component, ElementRef, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import {  ConnectionObject, LineObject, NgGdService, NodeObject, Point} from "ng-gd";
+@Component({
+  selector: 'app-ng-gd-component',
+  imports: [],
+  providers: [NgGdService],
+  templateUrl: './ng-gd-component.component.html',
+  styleUrl: './ng-gd-component.component.scss'
+})
+
+### create a canvas in html
+
+```html
+<canvas #canvas width="640" height="480"></canvas>
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### declare vars in your component class and call the lib;
 
-```bash
-ng generate --help
+```typescript
+import {
+  NgGdService,
+  Point,
+  NodeObject,
+} from 'ng-gd';
+
+export class App implements OnInit {
+gd = inject(NgGdService);
+private ctx!: CanvasRenderingContext2D;
+@ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLCanvasElement>;
+}
+
+ngOnInit(): void {
+    this.ctx = this.canvas.nativeElement.getContext('2d')!;
+    this.gd.start(640,480);
+    this.gd.setDarkMode();
+    this.gd.addNode({ x: 150, y: 150 }, "one", "this is the node one", false, 10, 10);
+    this.gd.clear(this.ctx);
+    this.gd.draw(this.ctx);
+}
 ```
 
-## Building
+If you have problems with go another page and return use after view init for refresh.
 
-To build the library, run:
+[Demo objects in stackblitz](https://stackblitz.com/edit/angular-ngdemo?file=src%2Fmain.ts)
 
-```bash
-ng build ng-gd
-```
+[Demo charts in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics?file=src%2Fmain.ts)
 
-This command will compile your project, and the build artifacts will be placed in the `dist/` directory.
+[Demo chart with map function in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics-tz8cjy?file=src%2Fmain.ts)
 
-### Publishing the Library
+[Demo ZOrder in GitHub](https://github.com/luisalejandrofigueredo/ZOrderDemo)
 
-Once the project is built, you can publish your library by following these steps:
+[Demo ZOrder in stackblitz](https://stackblitz.com/edit/angular-demozorder?file=src%2Fmain.ts)
 
-1. Navigate to the `dist` directory:
-   ```bash
-   cd dist/ng-gd
-   ```
+## List gd service commands
 
-2. Run the `npm publish` command to publish your library to the npm registry:
-   ```bash
-   npm publish
-   ```
+**start(width: number, height: number)** Start gd lib required for start.
 
-## Running unit tests
+**getLabels():** Get all labels.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+**findLabelByText(text: string):LabelObject** Get a label for your text.
 
-```bash
-ng test
-```
+**findByName(text: string): ArcObject | CandlestickObject | CircleObject | ConnectionObject | LabelObject | LineChartObject | ShapeObject** Find a object by name assign the name of the object first.
 
-## Running end-to-end tests
+**getConnections()** Get all connections.
 
-For end-to-end (e2e) testing, run:
+**getNodes()** Get all nodes.
 
-```bash
-ng e2e
-```
+**castingMultiplesSides(id: number)** Get a multiples sides object with id number.
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+**castingLine(id:number)** Get a line Object.
 
-## Additional Resources
+**castingRectangle(id: number)** Get a rectangle object.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**castingCircle(id: number)** Get a circle object.
+
+**castingNode(id:number)** Get a node object.
+
+**castingLabel(id: number)** Get a label object.
+
+**castingConnection(id: number)** Get connection object.
+
+**casting(id)** Get a any object with casting.
+
+**getMousePoint(ctx: CanvasRenderingContext2D, x: number, y: number)** Return a position the mouse.
+
+**setDarkMode()** Change the background color to black and ink white.
+
+**setLightMode()** Change the background color to white and ink black.
+
+**canvasSetSize(width: number, height: number)** Change canvas size for the library not the canvas.
+
+**resetMouse()** Reset last position.
+
+**clear(ctx: CanvasRenderingContext2D)** Clear the canvas.
+
+**clearObjects()** Delete all objects in the library.
+
+**addCandleChart(point: Point, candleStick: Candlestick[], width: number, height: number, bullColor: string | CanvasGradient | CanvasPattern, bearColor: string | CanvasGradient | CanvasPattern, distance: number)** Create a candle chart.
+
+**addPieChart(ctx: CanvasRenderingContext2D, point: Point, size: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number, start?: number, labels?: string[])** Create a pie chart.
+
+**addGraphBars(ctx: CanvasRenderingContext2D, point: Point, width: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number)** Create graph bars.
+
+**addLineChart(point: Point, values: number[], dist: number, color : string| CanvasGradient | CanvasPattern,marks?:boolean): LineChartObject** Create a line for chart.
+
+**addAxisY(ctx: CanvasRenderingContext2D, point: Point, dist: number, steps: number, labels: string[], fontSize: number, angleGrades?: number, distance?: number,adjustLabel?:Point[])** Create a y axis.
+
+**addAxisX(ctx: CanvasRenderingContext2D, point: Point, dist: number, steps: number, labels: string[], fontSize: number, angleGrades?: number, distance?: number,adjustLabel?:Point[])** Create a x axis.
+
+**addCandleStick(point: Point, candleStick: Candlestick, width: number, height: number, bullColor: string | CanvasGradient | CanvasPattern, bearColor: string | CanvasGradient | CanvasPattern): Candle_stick** Create a candle stick.
+
+**addMultiplesSides(point: Point, sides: number, radius: number, color?: string| CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern)** Create a figure with 5 sides minimum.
+
+**addTriangle(first: Point, second: Point, third: Point, color?: string, borderColor?: string,shadow?:boolean)** Create a triangle.
+
+**addCircle(point: Point, radius: number, color?: string, borderColor?: string,shadow?:boolean)** Create a circle.
+
+**addRectangle(point: Point, width: number, height: number, angle:number,color?: string, borderColor?: string,shadow?:boolean)** Create a rectangle.
+
+**addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number,shadow?:boolean)** Add node.
+
+**addConnection(point: Point, toPoint: Point, color?: string| CanvasGradient | CanvasPattern, label?: string,shadow?:boolean)** Create a connection.
+
+**addLine(point: Point, toPoint: Point, steps?: number, color?:(string| CanvasGradient | CanvasPattern))** Create a line steps mark the line like rule.
+
+**addLabel(point: Point, text: string, fontSize: number, angle: number,shadow?:boolean)** Create a label.
+
+**addArc(x: number, y: number, size: number, beginGrades: number, endGrades: number, color?: string| CanvasGradient | CanvasPattern, borderColor?: string| CanvasGradient | CanvasPattern,shadow?:boolean): ArcObject** Create a arc object
+
+**click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }** Return a array all objects are clicked with mouse order for ZOrder.
+Possible events off object.
+
+## inPoint Object are clicked.
+
+### Line and connection private events
+
+**inPointXY Object clicked in first point.**
+
+**inPointToXY Object clicked in second point.**
+
+**inRectangle Object clicked in the line.**
+
+**getClicks()** Return a list created for click function speed reasons.
+
+**draw(ctx: CanvasRenderingContext2D)** Draw all objects.
+
+**zoomInPoint(ctx: CanvasRenderingContext2D, x: number, y: number, zoom: number)** Zoom in x,y position.
+
+**getItem(id:number)** Return a object with casting to ShapeObject.
+
+## Object properties all object are derived the class ShapeObject.
+
+x:position x.
+y:position y.
+
+**color** Object color gd support string,patterns or gradients;
+
+**visible** Toggle object to visible you turn false the object not draw.
+
+**type** Variable with string class of the object the easy way to obtain the type class the one object.
+
+**possibles values are**
+
+**label**
+
+**node**
+
+**connection**
+
+**rectangle**
+
+**circle**
+
+**triangle**
+
+**multiplesSides**
+
+**line**
+
+**arc**
+
+**lineChart**
+
+**candleStick**
+
+## Objects common functions
+
+**drawShape(ctx: CanvasRenderingContext2D)** Draw the object in the canvas.
+
+**inverseShape(ctx: CanvasRenderingContext2D)** Draw the object with background color.
+
+**inPoint(x: number, y: number)** Return true if the object is in position x,y.
+
+**move(x:number,y:number)** Move the object to new position.
+
+**moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent)** Move the object to mouse position.
+
+## Additional functions for LineObject and ConnectionObject
+
+**inPointXY(x: number, y: number): boolean** If the mouse is over the first point the line or connection.
+
+**inPointToXY(x: number, y: number): boolean** If the mouse is over the second point the line or connection.
+
+**inRectangle(x: number, y: number): boolean** If the mouse is over the line.
+
+**moveMouseXY(ctx: CanvasRenderingContext2D, event: MouseEvent)** Mouse move the first point to new position.
+
+**moveMouseToXY(ctx: CanvasRenderingContext2D, event: MouseEvent)** Mouse move the second point to new position.
+
+## Objects level
+
+**toFront()** Move the object to fist plane over all objects.
+
+**toTop()** Move the object to first plane.
+
+**toBack()** Move the object to last plane.
+
+**nextZOrder()** Move the object one plane to front.
+
+**backZOrder()** Move the object one plane to back.
+
+Service renumber is for not let plane withouts objects.
+for sample .
+
+**this.gd.renumberZOrder()**
+
+## Auxiliary functions.
+
+**map(number: number, startInput: number, stopInput: number, startOutput: number, stopOutput: number): number** This function is for change range of values for example if you need translate 33 in percentage to grades use this.gd.map(33,0,100,0,360)
+
+**move(point: Point, angle: number, distance: number): Point** Move point angle and distance.
+
+**toRadians(grades: number): number** Return degrees in radians.
+
+**toDegrees(radian: number): number** Return radians in degrees.
+
+**distance(from:Point,to:Point):number** Distance between two points.
+
+**angle(from:Point,to:Point):number** Angle from point to point.
+
+**function for tablest**
+
+tap(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): { shape: ShapeObject, action: string }[] {
+
+use common in  hotlistenner read this sample code
+
+```typescript
+  @HostListener('touchstart', ["$event"])
+  onTouchStart(event: TouchEvent) {
+    if (event.targetTouches.length === 1) {
+      this.gd.tap(this.canvas, this.ctx, event);
+      if (this.gd.clicks.length === 0) {
+        const offSet = this.gd.offSet(this.canvas, event)
+        this.dragStartPosition = this.gd.getMousePoint(this.ctx, offSet.offSetX, offSet.offSetY);
+        this.isDragging = true;
+
+      } else {
+        const element = this.gd.getClicks()[0];
+        if (element.shape.type = 'node') {
+          if (this.createConnection === false && this.createChildren === false) {
+            this.cacheNode = <NodeObject>element.shape;
+            this.IsMoving = true;
+          }
+        }
+      }
+    }
+    if (event.targetTouches.length === 2) {
+      const from: Point = { x: event.targetTouches.item(0)!.clientX, y: event.targetTouches.item(0)!.clientY };
+      const to: Point = { x: event.targetTouches.item(1)!.clientX, y: event.targetTouches.item(1)!.clientY }
+      this.initialDistance = this.gd.distance(from, to)
+    }
+  }
+
+
+@HostListener('touchmove', ["$event"]) //zoom sample
+  onTouchMove(event: TouchEvent) {
+    event.preventDefault();
+       if (event.targetTouches.length === 2) {
+      const touch = event.targetTouches.item(0);
+      const offSet = this.offSet(event);
+      const currentTransformedCursor = this.getTransformedPoint(offSet.offSetX, offSet.offSetY);
+      const mouseX = currentTransformedCursor.x;
+      const mouseY = currentTransformedCursor.y;
+      const currentDistance = this.gd.distance({ x: event.targetTouches.item(0)!.clientX, y: event.targetTouches.item(0)!.clientY }, { x: event.targetTouches.item(1)!.clientX, y: event.targetTouches.item(1)!.clientY });
+      const zoom = currentDistance > this.initialDistance ? 1.1 : 0.9;
+      if (currentDistance>this.initialDistance && this.ctx.getTransform().a<2) {
+        this.gd.zoomInPoint(this.ctx, mouseX, mouseY, zoom);
+        this.zoomService.setZoom(this.ctx.getTransform());
+        this.refresh();
+      }
+      if (currentDistance<this.initialDistance && this.ctx.getTransform().a>0.25) {
+        this.gd.zoomInPoint(this.ctx, mouseX, mouseY, zoom);
+        this.zoomService.setZoom(this.ctx.getTransform());
+        this.refresh();
+      }
+    }
+  }
+  ```
+
+sources:**https://github.com/luisalejandrofigueredo/ng-gd**
+For help send email to:**luisalejandrofigueredo@gmail.com**
+or:[Likedin](http://www.linkedin.com/in/luis-figueredo-casadei)
+
+Mi web page is:(https://luisalejandrofigueredo.com)
