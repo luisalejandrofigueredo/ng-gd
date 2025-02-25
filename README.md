@@ -62,7 +62,7 @@ import {  ConnectionObject, LineObject, NgGdService, NodeObject, Point} from "ng
   templateUrl: './ng-gd-component.component.html',
   styleUrl: './ng-gd-component.component.scss'
 })
-
+```
 ### create a canvas in html
 
 ```html
