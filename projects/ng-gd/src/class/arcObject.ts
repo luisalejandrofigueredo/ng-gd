@@ -3,7 +3,12 @@ import { distance, move, toRadians, angle, toDegrees, getTransformedPoint } from
 import { ElementRef } from "@angular/core";
 export class ArcObject extends ShapeObject {
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        throw new Error("Method not implemented.");
+        const touch = event.touches[0];
+        const rect = canvas.nativeElement.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        const point = getTransformedPoint(ctx, offsetX, offsetY);
+        this.move(point.x, point.y);
     }
     size: number = 0;
     beginGrades: number = 0;

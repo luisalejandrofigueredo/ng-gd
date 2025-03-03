@@ -3,20 +3,25 @@ import { angle, distance, getNewParallelPoint, getTransformedPoint, isPointInsid
 import { ShapeObject } from './shape-object'
 export class LineObject extends ShapeObject {
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        throw new Error('Method not implemented.');
+        const touch = event.touches[0];
+        const rect = canvas.nativeElement.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        const point = getTransformedPoint(ctx, offsetX, offsetY);
+        this.move(point.x, point.y);
     }
     toX: number;
     toY: number;
-    steps:number=0;
-    constructor(x: number, y: number, toX: number, toY: number, steps?:number,color?: string | CanvasGradient | CanvasPattern,shadow?:boolean) {
+    steps: number = 0;
+    constructor(x: number, y: number, toX: number, toY: number, steps?: number, color?: string | CanvasGradient | CanvasPattern, shadow?: boolean) {
         super();
         this.x = x;
         this.y = y;
         this.toX = toX;
         this.toY = toY;
         this.type = 'line';
-        if (steps){
-            this.steps=steps;
+        if (steps) {
+            this.steps = steps;
         }
         if (color !== undefined) {
             this.color = color;
@@ -24,12 +29,12 @@ export class LineObject extends ShapeObject {
             this.color = this.FgColor;
         }
         if (shadow) {
-            this.shadow=shadow;
+            this.shadow = shadow;
         }
     }
     override drawShape(ctx: CanvasRenderingContext2D): void {
         if (this.visible === true) {
-            if (this.shadow===true){
+            if (this.shadow === true) {
                 ctx.shadowColor = ShapeObject.shadowColor;
                 ctx.shadowBlur = 6;
                 ctx.shadowOffsetX = 6;
@@ -44,7 +49,7 @@ export class LineObject extends ShapeObject {
             ctx.strokeStyle = this.color;
             const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
             const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-            const dist = distance(this.x,this.y, this.toX, this.toY);
+            const dist = distance(this.x, this.y, this.toX, this.toY);
             const rect = rectangle(this.x, this.y, 2, dist, nodeAngle);
             ctx.beginPath();
             ctx.moveTo(rect.first.x, rect.first.y);
@@ -54,19 +59,19 @@ export class LineObject extends ShapeObject {
             ctx.lineTo(rect.first.x, rect.first.y);
             ctx.closePath();
             ctx.fill();
-            const stepsPoint=dist/this.steps;
+            const stepsPoint = dist / this.steps;
             for (let index = 0; index <= this.steps; index++) {
-                const parPoint=getNewParallelPoint(this.x, this.y, this.toX, this.toY, stepsPoint*index , 1);
-                const secParPoint=move(parPoint.x,parPoint.y,nodeAngle-Math.PI/2,5);
+                const parPoint = getNewParallelPoint(this.x, this.y, this.toX, this.toY, stepsPoint * index, 1);
+                const secParPoint = move(parPoint.x, parPoint.y, nodeAngle - Math.PI / 2, 5);
                 ctx.beginPath();
-                ctx.moveTo(parPoint.x,parPoint.y);
-                ctx.lineTo(secParPoint.x,secParPoint.y);
+                ctx.moveTo(parPoint.x, parPoint.y);
+                ctx.lineTo(secParPoint.x, secParPoint.y);
                 ctx.stroke();
             }
         }
     }
     override inverseShape(ctx: CanvasRenderingContext2D): void {
-         ctx.fillStyle = this.BgColor;
+        ctx.fillStyle = this.BgColor;
         ctx.strokeStyle = this.BgColor;
         const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
         const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
@@ -121,20 +126,20 @@ export class LineObject extends ShapeObject {
         let moveToNode = move(this.toX, this.toY, toNodeAngle, 40);
         const rectangleArea = rectangle(moveNode.x, moveNode.y, 2, distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y), nodeAngle)
         if (isPointInsideRectangle({ x: x, y: y }, rectangleArea.first, rectangleArea.second, rectangleArea.third, rectangleArea.forth)) {
-          return true;
+            return true;
         }
         return false;
-      }
+    }
     override move(x: number, y: number): void {
-        if (!(ShapeObject.lastMove.x===0 && ShapeObject.lastMove.y===0)) {
-            const deltaX=x-ShapeObject.lastMove.x;
-            const deltaY=y-ShapeObject.lastMove.y;
-            this.x+=deltaX;
-            this.y+=deltaY;
-            this.toX+=deltaX;
-            this.toY+=deltaY;
+        if (!(ShapeObject.lastMove.x === 0 && ShapeObject.lastMove.y === 0)) {
+            const deltaX = x - ShapeObject.lastMove.x;
+            const deltaY = y - ShapeObject.lastMove.y;
+            this.x += deltaX;
+            this.y += deltaY;
+            this.toX += deltaX;
+            this.toY += deltaY;
         }
-        ShapeObject.lastMove={x:x,y:y};
+        ShapeObject.lastMove = { x: x, y: y };
     }
     override moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent): void {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);

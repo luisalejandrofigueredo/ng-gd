@@ -9,14 +9,19 @@ interface Triangle {
 }
 export class MultiplesSidesObject extends ShapeObject {
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        throw new Error('Method not implemented.');
+        const touch = event.touches[0];
+        const rect = canvas.nativeElement.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        const point = getTransformedPoint(ctx, offsetX, offsetY);
+        this.move(point.x, point.y);
     }
     sides: number = 0;
     radius: number = 0;
     borderColor: string | CanvasGradient | CanvasPattern = ""
     triangles: Triangle[] = [];
     angle = 0;
-    constructor(x: number, y: number, sides: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, angle?: number,shadow?:boolean) {
+    constructor(x: number, y: number, sides: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, angle?: number, shadow?: boolean) {
         super();
         this.x = x;
         this.y = y;
@@ -38,7 +43,7 @@ export class MultiplesSidesObject extends ShapeObject {
 
         }
         if (shadow) {
-            this.shadow=shadow;
+            this.shadow = shadow;
         }
         const radian = 2 * Math.PI / this.sides;
         for (let i = 0; i < this.sides; i++) {
@@ -50,7 +55,7 @@ export class MultiplesSidesObject extends ShapeObject {
 
     override drawShape(ctx: CanvasRenderingContext2D): void {
         if (this.visible === true) {
-            if (this.shadow===true){
+            if (this.shadow === true) {
                 ctx.shadowColor = ShapeObject.shadowColor;
                 ctx.shadowBlur = 6;
                 ctx.shadowOffsetX = 6;

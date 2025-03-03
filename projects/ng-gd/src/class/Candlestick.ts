@@ -5,7 +5,12 @@ import { getTransformedPoint, isPointInsideRectangle, rectangle } from "../trigo
 import { ShapeObject } from "./shape-object";
 export class CandlestickObject extends ShapeObject {
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        throw new Error("Method not implemented.");
+        const touch = event.touches[0];
+        const rect = canvas.nativeElement.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        const point = getTransformedPoint(ctx, offsetX, offsetY);
+        this.move(point.x, point.y);
     }
     private stick: Candlestick = { timestamp: 0, open: 0, close: 0, high: 0, low: 0 }
     bullColor: string | CanvasGradient | CanvasPattern = "#ff0000";

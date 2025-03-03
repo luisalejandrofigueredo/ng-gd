@@ -3,7 +3,6 @@ import { LabelObject } from "../class/label-object";
 import { distance, toRadians,toDegrees, move, fillCircle, getTransformedPoint, angle, offSet } from "../trigonometrics";
 import { ElementRef } from "@angular/core";
 export class NodeObject extends ShapeObject {
-    
     description!: string;
     net: boolean = false;
     angleLabel: number = 0;

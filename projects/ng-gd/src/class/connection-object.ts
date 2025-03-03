@@ -4,8 +4,41 @@ import { toRadians, angle, move, rectangle, distance, fillCircle, getNewParallel
 import { ElementRef } from "@angular/core";
 export class ConnectionObject extends ShapeObject {
   override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-    throw new Error("Method not implemented.");
+    const touch = event.touches[0];
+    const rect = canvas.nativeElement.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;
+    const offsetY = touch.clientY - rect.top;
+    const point = getTransformedPoint(ctx, offsetX, offsetY);
+    this.move(point.x, point.y);
   }
+  moveTouchXY(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
+    const touch = event.touches[0];
+    const rect = canvas.nativeElement.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;  // get offset of the canvas
+    const offsetY = touch.clientY - rect.top;  // get offset of the canvas  
+    const point = getTransformedPoint(ctx, offsetX, offsetY);
+    if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) { 
+      const deltaX = point.x - ShapeObject.lastMove.x;
+      const deltaY = point.y - ShapeObject.lastMove.y;
+      this.x += deltaX;
+      this.y += deltaY;
+    }
+    ShapeObject.lastMove = point;
+  }
+  moveTouchToXY(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
+    const touch = event.touches[0];
+    const rect = canvas.nativeElement.getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;  // get offset of the canvas
+    const offsetY = touch.clientY - rect.top;  // get offset of the canvas
+    const point = getTransformedPoint(ctx, offsetX, offsetY);
+    if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) {
+      const deltaX = point.x - ShapeObject.lastMove.x;
+      const deltaY = point.y - ShapeObject.lastMove.y;
+      this.toX += deltaX;
+      this.toY += deltaY;
+    }
+    ShapeObject.lastMove = point;
+  }   
   labelObject= new LabelObject(0,0,"");
   toX: number;
   toY: number;
@@ -13,11 +46,15 @@ export class ConnectionObject extends ShapeObject {
   align: number = 0;
   distance: number = 20;
   shape = 0;
-  constructor(x: number, y: number, toX: number, toY: number, color?: string | CanvasGradient | CanvasPattern, name?: string, shadow?: boolean, zOrder?: number) {
+  arrow=false;
+  constructor(x: number, y: number, toX: number, toY: number, color?: string | CanvasGradient | CanvasPattern, name?: string, shadow?: boolean, zOrder?: number,arrow?:boolean) {
     super()
     this.x = x;
     this.y = y;
     this.type = 'connection';
+    if (arrow!==undefined){
+      this.arrow=arrow;
+    }
     if (color !== undefined) {
       this.color = color;
     } else {
@@ -226,7 +263,9 @@ export class ConnectionObject extends ShapeObject {
         textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, this.distance);
       }
       if (this.mirrorLabel === false) {
-        this.labelObject.text=this.name+"\u2192";
+        if (this.arrow===true){
+          this.labelObject.text=this.name+"\u2192";
+        }
         this.labelObject.x=textPosition.x;
         this.labelObject.y=textPosition.y;
         this.labelObject.angle=angleC;
@@ -234,7 +273,9 @@ export class ConnectionObject extends ShapeObject {
         this.labelObject.sizeText=16;
         this.labelObject.drawShape(ctx);
       } else {
-        this.labelObject.text="\u2190"+this.name;
+        if (this.arrow===true){
+          this.labelObject.text="\u2190"+this.name;
+        }
         this.labelObject.x=textPosition.x;
         this.labelObject.y=textPosition.y;
         this.labelObject.angle=angleC+Math.PI;

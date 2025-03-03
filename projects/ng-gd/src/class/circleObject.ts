@@ -3,16 +3,21 @@ import { distance, getTransformedPoint } from "../trigonometrics";
 import { ElementRef } from "@angular/core";
 export class CircleObject extends ShapeObject {
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        throw new Error("Method not implemented.");
+        const touch = event.touches[0];
+        const rect = canvas.nativeElement.getBoundingClientRect();
+        const offsetX = touch.clientX - rect.left;
+        const offsetY = touch.clientY - rect.top;
+        const point = getTransformedPoint(ctx, offsetX, offsetY);
+        this.move(point.x, point.y);
     }
     radius = 0;
-    borderColor: string | CanvasGradient | CanvasPattern= "";
-    constructor(x: number, y: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern,shadow?:boolean) {
+    borderColor: string | CanvasGradient | CanvasPattern = "";
+    constructor(x: number, y: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean) {
         super();
         this.x = x;
         this.y = y;
         this.radius = radius;
-        this.type="circle";
+        this.type = "circle";
         if (color) {
             this.color = color;
         } else {
@@ -24,12 +29,12 @@ export class CircleObject extends ShapeObject {
             this.borderColor = this.FgColor;
         }
         if (shadow) {
-            this.shadow=shadow;
+            this.shadow = shadow;
         }
     }
     override drawShape(ctx: CanvasRenderingContext2D): void {
-        if (this.visible===true){
-            if (this.shadow===true){
+        if (this.visible === true) {
+            if (this.shadow === true) {
                 ctx.shadowColor = ShapeObject.shadowColor;
                 ctx.shadowBlur = 6;
                 ctx.shadowOffsetX = 6;
@@ -68,12 +73,12 @@ export class CircleObject extends ShapeObject {
     }
     override moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent): void {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
-        if (ShapeObject.lastMove.x!==0 && ShapeObject.lastMove.y!==0){
-            const deltaX=point.x-ShapeObject.lastMove.x;
-            const deltaY=point.y-ShapeObject.lastMove.y;
-            this.x+=deltaX;
-            this.y+=deltaY;
+        if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) {
+            const deltaX = point.x - ShapeObject.lastMove.x;
+            const deltaY = point.y - ShapeObject.lastMove.y;
+            this.x += deltaX;
+            this.y += deltaY;
         }
-        ShapeObject.lastMove=point;
+        ShapeObject.lastMove = point;
     }
 }
