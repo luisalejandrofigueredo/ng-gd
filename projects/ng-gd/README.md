@@ -4,6 +4,9 @@ The easy way to manage the canvas.
 Support object and clicks with mouse or tablet events to the objects
 This library was generated with [Angular CLI](https://github.com/angular/angular-cli) Angular 17
 **chat GPT implementation in curse.**
+If ChatGPT does not recognize the NG-GD library, you can show it to him and he will integrate it into your environment. For this, you must tell him where the library is. https://www.npmjs.com/package/ng-gd then for it to understand you better you must add code from the demos in stack blitz with this cht gpt will understand its operation for you.
+Use Code GPT for better answers.
+Claude experimental link:https://claude.ai/share/8f2504d1-e6c4-44ba-902a-b2912f4375b1
 
 ## Build
 
@@ -29,7 +32,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
-| 4.0.0               | 19.1.4      |
+| 4.4.4               | 19.1.4      |
 | 3.4.0               | 19.1.4      |
 | 3.0.2               | 18.2        |
 | 3.0.0               | 18          |
