@@ -219,6 +219,7 @@ export class NgGdService {
   clearObjects() {
     const document = this.canvasObjects.find(this.findDocument);
     this.canvasObjects = [];
+    ShapeObject.resetIds();
     if (document !== undefined) {
       this.canvasObjects.push(document);
     }

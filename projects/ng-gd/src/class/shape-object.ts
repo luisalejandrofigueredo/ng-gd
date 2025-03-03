@@ -114,4 +114,9 @@ export abstract class ShapeObject implements CommonProperties {
   resetMouse(){
     ShapeObject.lastMove={x:0,y:0};
   }
+  
+  static resetIds() {
+    ShapeObject.maxId = -1;
+    ShapeObject.maxZOrder = 0;
+  }
 }

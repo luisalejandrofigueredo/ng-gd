@@ -4,7 +4,8 @@
   "license": "MIT",
   "author": {
     "name": "Luis Alejandro Figueredo Casadei",
-    "email": "luisalejandrofigueredo@gmail.com"},
+    "email": "luisalejandrofigueredo@gmail.com"
+  },
   "keywords": [
     "canvas",
     "Angular",
@@ -25,5 +26,8 @@
   "dependencies": {
     "tslib": "^2.3.0"
   },
-  "sideEffects": false
+  "sideEffects": false,
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts"
 }
