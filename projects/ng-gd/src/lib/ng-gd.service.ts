@@ -7,6 +7,7 @@ import { LabelObject } from '../class/label-object';
 import { angle, convertArray, distance, getTransformedPoint, map, move, toDegrees, toRadians } from '../trigonometrics';
 import { DocumentObject, LineObject } from '../public-api';
 import { RectangleObject } from '../class/rectangleObject';
+import { ImageObject } from "../class/image-object";
 import { CircleObject } from '../class/circleObject';
 import { TriangleObject } from '../class/triangleObject';
 import { MultiplesSidesObject } from '../class/multiplesSides';
@@ -226,7 +227,7 @@ export class NgGdService {
   }
 
   addCollateral(from: Point, to: Point, node: Point) {
-    const newCollateral=new CollateralObject(from,to,node);
+    const newCollateral = new CollateralObject(from, to, node);
     this.canvasObjects.push(<ShapeObject>newCollateral);
     return newCollateral;
   }
@@ -364,8 +365,14 @@ export class NgGdService {
     return newRectangle
   }
 
+  addImage(point: Point, width: number, height: number, image: string, angle: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject {
+    const newImage = new ImageObject(point.x, point.y, width, height, image, angle, borderColor, shadow,angleLabel,distanceLabel,text);
+    this.canvasObjects.push((<ShapeObject>newImage));
+    return newImage
+  }
+
   addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern): NodeObject {
-    const newNode = new NodeObject(point.x, point.y, name, 4, description, net, angleLabel, distanceLabel, shadow, color);
+    const newNode = new NodeObject(point.x, point.y, name, 20, description, net, angleLabel, distanceLabel, shadow, color);
     this.canvasObjects.push((<ShapeObject>newNode));
     return newNode;
   }
@@ -423,6 +430,11 @@ export class NgGdService {
           onclick.push({ shape: element, action: 'inPoint' });
         }
         if (element.type === 'node') {
+          if ((element as NodeObject).inPointLabel(position.x, position.y) === true) {
+            onclick.push({ shape: element, action: 'inPointLabel' });
+          }
+        }
+        if (element.type === 'image') {
           if ((element as NodeObject).inPointLabel(position.x, position.y) === true) {
             onclick.push({ shape: element, action: 'inPointLabel' });
           }

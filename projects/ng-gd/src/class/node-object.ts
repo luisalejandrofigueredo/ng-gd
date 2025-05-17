@@ -7,7 +7,7 @@ export class NodeObject extends ShapeObject {
     net: boolean = false;
     angleLabel: number = 0;
     distanceLabel: number = 10;
-    radius: number = 10;
+    radius: number = 40;
     shape = 0;
     labelObject = new LabelObject(0, 0, "");
     constructor(x: number, y: number, name: string, radius: number, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern) {
@@ -48,6 +48,7 @@ export class NodeObject extends ShapeObject {
         this.angleLabel = toDegrees(angle( this.x, this.y,this.labelObject.x, this.labelObject.y));
         ShapeObject.lastMove = point;
     }
+    
     override moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent) {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
         if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) {
@@ -58,6 +59,7 @@ export class NodeObject extends ShapeObject {
         }
         ShapeObject.lastMove = point;
     }
+    
     moveTouchText(canvas:ElementRef,ctx: CanvasRenderingContext2D, event: TouchEvent) {
         const varOffSet=offSet(canvas,event);
         const point = getTransformedPoint(ctx, varOffSet.offSetX, varOffSet.offSetY);

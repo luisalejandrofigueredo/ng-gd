@@ -20,5 +20,6 @@ export * from './class/arcObject';
 export * from './class/lineChartObject';
 export * from './class/Candlestick';
 export * from  './class/lineObject';
+export * from './class/image-object'
 export * from './interfaces/point';
 export * from './interfaces/candle-stick '
