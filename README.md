@@ -32,7 +32,8 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
-| 4.4.4               | 19.14
+| 4.4.6               | 19.14       |
+| 4.4.4               | 19.14       |
 | 3.0.4               | 19.1.4      |
 | 3.0.2               | 18.2        |
 | 3.0.0               | 18          |
@@ -41,7 +42,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 
 
-
+*Feature new image object.
 *Feature shadow in objects.
 
 ## Usage
@@ -171,6 +172,13 @@ If you have problems with go another page and return use after view init for ref
 **addPieChart(ctx: CanvasRenderingContext2D, point: Point, size: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number, start?: number, labels?: string[])** Create a pie chart.
 
 **addGraphBars(ctx: CanvasRenderingContext2D, point: Point, width: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number)** Create graph bars.
+
+**addImage(point: Point, width: number, height: number, angle: number, borderColor?string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
+
+sample use 
+let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,0,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
+await image.loadImageFromUrl('tapachica.png');
+
 
 **addLineChart(point: Point, values: number[], dist: number, color : string| CanvasGradient | CanvasPattern,marks?:boolean): LineChartObject** Create a line for chart.
 

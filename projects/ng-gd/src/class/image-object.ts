@@ -12,16 +12,15 @@ export class ImageObject extends ShapeObject {
     angleLabel: number = 0;
     distanceLabel: number = 10
     imageBuffer: HTMLImageElement = new Image();
-    constructor(x: number, y: number, width: number, height: number, image: string, angle?: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string) {
+    constructor(x: number, y: number, width: number, height: number, angle?: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string) {
         super();
         this.color = "rgba(0,0,0,1)";
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.imageBuffer.src = image;
-        if (angle) {
-            this.angle;
+        if (typeof angle === "number") {
+            this.angle = angle;
         }
         if (borderColor) {
             this.borderColor = borderColor;
@@ -29,16 +28,36 @@ export class ImageObject extends ShapeObject {
         if (shadow) {
             this.shadow = shadow;
         }
-        if (angleLabel) {
+        if (typeof angleLabel === "number") {
             this.angleLabel = angleLabel;
         }
-        if (distanceLabel) {
+        if (typeof distanceLabel === "number") {
             this.distanceLabel = distanceLabel;
         }
         if (text) {
             this.labelObject.text = text;
         }
     }
+
+    async loadImageFromUrl(url: string): Promise<HTMLImageElement> {
+        try {
+            const img = await this.loadImage(url);
+             this.imageBuffer = img;
+            return this.imageBuffer;
+        } catch (error: any) {
+            console.error(`Error loading image: ${error.message}`);
+            return new Image(); // Devuelve una imagen vacía en caso de error
+        }
+    }
+
+   loadImage(url:string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.src= url;
+        img.onload = () => resolve(img); // Resuelve la Promise con el objeto Image cuando carga
+        img.onerror = (error) => reject(new Error(`Failed to load image at ${url}:`)); // Rechaza si hay un error
+    });
+}
 
     override drawShape(ctx: CanvasRenderingContext2D): void {
         if (this.shadow === true) {
@@ -65,11 +84,10 @@ export class ImageObject extends ShapeObject {
         ctx.fill();
         ctx.stroke();
         const imageAngle = toRadians(this.angle);
-        const imageObject = this.imageBuffer;
         const centerX = rect.forth.x;
         const centerY = rect.forth.y;
         ctx.rotate(imageAngle);
-        ctx.drawImage(imageObject, centerX, centerY, this.width, this.height);
+        ctx.drawImage(this.imageBuffer, centerX, centerY, this.width, this.height);
         ctx.rotate(-imageAngle);
         const movePos = move(this.x, this.y, toRadians(this.angleLabel), this.distanceLabel);
         this.labelObject.x = movePos.x;
