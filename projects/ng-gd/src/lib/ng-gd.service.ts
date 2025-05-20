@@ -365,8 +365,8 @@ export class NgGdService {
     return newRectangle
   }
 
-  addImage(point: Point, width: number, height: number, angle: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject {
-    const newImage = new ImageObject(point.x, point.y, width, height, angle, borderColor, shadow,angleLabel,distanceLabel,text);
+  addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject {
+    const newImage = new ImageObject(point.x, point.y, width, height,  borderColor, shadow,angleLabel,distanceLabel,text);
     this.canvasObjects.push((<ShapeObject>newImage));
     return newImage
   }

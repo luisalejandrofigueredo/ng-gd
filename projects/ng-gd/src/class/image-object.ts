@@ -12,7 +12,7 @@ export class ImageObject extends ShapeObject {
     angleLabel: number = 0;
     distanceLabel: number = 10
     imageBuffer: HTMLImageElement = new Image();
-    constructor(x: number, y: number, width: number, height: number, angle?: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string) {
+    constructor(x: number, y: number, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string) {
         super();
         this.color = "rgba(0,0,0,1)";
         this.x = x;

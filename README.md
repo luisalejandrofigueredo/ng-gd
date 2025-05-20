@@ -173,10 +173,11 @@ If you have problems with go another page and return use after view init for ref
 
 **addGraphBars(ctx: CanvasRenderingContext2D, point: Point, width: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number)** Create graph bars.
 
-**addImage(point: Point, width: number, height: number, angle: number, borderColor?string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
+**addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
 
-sample use 
-let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,0,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
+sample
+ 
+let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
 await image.loadImageFromUrl('tapachica.png');
 
 
