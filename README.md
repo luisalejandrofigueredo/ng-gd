@@ -175,8 +175,8 @@ If you have problems with go another page and return use after view init for ref
 
 **addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
 
-sample
- 
+sample code 
+
 let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
 await image.loadImageFromUrl('tapachica.png');
 
@@ -215,6 +215,8 @@ console.log(clickedObjects);
 
 
 ## ShapeObject posibles values in type
+**image**
+
 **label**
 
 **node**

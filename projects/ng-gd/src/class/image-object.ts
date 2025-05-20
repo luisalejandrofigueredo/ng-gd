@@ -12,8 +12,10 @@ export class ImageObject extends ShapeObject {
     angleLabel: number = 0;
     distanceLabel: number = 10
     imageBuffer: HTMLImageElement = new Image();
+    
     constructor(x: number, y: number, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string) {
         super();
+        this.type = 'image';
         this.color = "rgba(0,0,0,1)";
         this.x = x;
         this.y = y;
@@ -124,6 +126,14 @@ export class ImageObject extends ShapeObject {
         }
         return false
     }
+    
+    inPointLabel(x: number, y: number): boolean {
+        if (this.labelObject.inPoint(x, y) === true) {
+            return true;
+        }
+        return false;
+    }
+
 
     override move(x: number, y: number): void {
         this.x = x;

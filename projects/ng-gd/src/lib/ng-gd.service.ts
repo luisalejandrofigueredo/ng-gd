@@ -365,8 +365,8 @@ export class NgGdService {
     return newRectangle
   }
 
-  addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject {
-    const newImage = new ImageObject(point.x, point.y, width, height,  borderColor, shadow,angleLabel,distanceLabel,text);
+  addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string): ImageObject {
+    const newImage = new ImageObject(point.x, point.y, width, height, borderColor, shadow, angleLabel, distanceLabel, text);
     this.canvasObjects.push((<ShapeObject>newImage));
     return newImage
   }
@@ -426,18 +426,18 @@ export class NgGdService {
     let onclick: { shape: ShapeObject, action: string }[] = []
     this.canvasObjects.forEach((element) => {
       if (element.type !== 'connection' && element.type !== 'line') {
-        if (element.inPoint(position.x, position.y)) {
-          onclick.push({ shape: element, action: 'inPoint' });
-        }
         if (element.type === 'node') {
           if ((element as NodeObject).inPointLabel(position.x, position.y) === true) {
             onclick.push({ shape: element, action: 'inPointLabel' });
           }
         }
         if (element.type === 'image') {
-          if ((element as NodeObject).inPointLabel(position.x, position.y) === true) {
+          if ((element as ImageObject).inPointLabel(position.x, position.y) === true) {
             onclick.push({ shape: element, action: 'inPointLabel' });
           }
+        }
+        if (element.inPoint(position.x, position.y)) {
+          onclick.push({ shape: element, action: 'inPoint' });
         }
       }
       if (element.type === 'connection') {

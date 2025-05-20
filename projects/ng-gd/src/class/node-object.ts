@@ -1,6 +1,6 @@
 import { ShapeObject } from "./shape-object";
 import { LabelObject } from "../class/label-object";
-import { distance, toRadians,toDegrees, move, fillCircle, getTransformedPoint, angle, offSet } from "../trigonometrics";
+import { distance, toRadians, toDegrees, move, fillCircle, getTransformedPoint, angle, offSet } from "../trigonometrics";
 import { ElementRef } from "@angular/core";
 export class NodeObject extends ShapeObject {
     description!: string;
@@ -44,11 +44,11 @@ export class NodeObject extends ShapeObject {
     moveMouseText(ctx: CanvasRenderingContext2D, event: MouseEvent) {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
         this.labelObject.moveMouse(ctx, event)
-        this.distanceLabel = distance( this.x, this.y,this.labelObject.x, this.labelObject.y,);
-        this.angleLabel = toDegrees(angle( this.x, this.y,this.labelObject.x, this.labelObject.y));
+        this.distanceLabel = distance(this.x, this.y, this.labelObject.x, this.labelObject.y,);
+        this.angleLabel = toDegrees(angle(this.x, this.y, this.labelObject.x, this.labelObject.y));
         ShapeObject.lastMove = point;
     }
-    
+
     override moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent) {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
         if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) {
@@ -59,18 +59,18 @@ export class NodeObject extends ShapeObject {
         }
         ShapeObject.lastMove = point;
     }
-    
-    moveTouchText(canvas:ElementRef,ctx: CanvasRenderingContext2D, event: TouchEvent) {
-        const varOffSet=offSet(canvas,event);
+
+    moveTouchText(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent) {
+        const varOffSet = offSet(canvas, event);
         const point = getTransformedPoint(ctx, varOffSet.offSetX, varOffSet.offSetY);
-        this.labelObject.moveTouch(canvas,ctx, event)
-        this.distanceLabel = distance( this.x, this.y,this.labelObject.x, this.labelObject.y,);
-        this.angleLabel = toDegrees(angle( this.x, this.y,this.labelObject.x, this.labelObject.y));
+        this.labelObject.moveTouch(canvas, ctx, event)
+        this.distanceLabel = distance(this.x, this.y, this.labelObject.x, this.labelObject.y,);
+        this.angleLabel = toDegrees(angle(this.x, this.y, this.labelObject.x, this.labelObject.y));
         ShapeObject.lastMove = point;
     }
 
     override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
-        const varOffSet=offSet(canvas,event);
+        const varOffSet = offSet(canvas, event);
         const point = getTransformedPoint(ctx, varOffSet.offSetX, varOffSet.offSetY);
         if (ShapeObject.lastMove.x !== 0 && ShapeObject.lastMove.y !== 0) {
             const deltaX = point.x - ShapeObject.lastMove.x;
@@ -136,6 +136,8 @@ export class NodeObject extends ShapeObject {
         }
         return false;
     }
+
+
 
     override inPoint(x: number, y: number): boolean {
         if (distance(this.x, this.y, x, y) <= this.radius) {
