@@ -7,7 +7,6 @@ This library was generated with [Angular CLI](https://github.com/angular/angular
 If ChatGPT does not recognize the NG-GD library, you can show it to him and he will integrate it into your environment. For this, you must tell him where the library is. https://www.npmjs.com/package/ng-gd then for it to understand you better you must add code from the demos in stack blitz with this cht gpt will understand its operation for you.
 Use Code GPT for better answers.
 Claude experimental link:https://claude.ai/share/8f2504d1-e6c4-44ba-902a-b2912f4375b1
-
 ## Build
 
 Run `ng build ng-gd` to build the lib. The build artifacts will be stored in the `dist/` directory.
@@ -28,12 +27,16 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 🖥️ Optimized for mouse and tablet interactions.
 
+
 ## Versions
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
-| 4.4.4               | 19.1.4      |
-| 3.4.0               | 19.1.4      |
+| 4.6.0               | 19.14       |
+| 4.4.8               | 19.14       |
+| 4.4.6               | 19.14       |
+| 4.4.4               | 19.14       |
+| 3.0.4               | 19.1.4      |
 | 3.0.2               | 18.2        |
 | 3.0.0               | 18          |
 | 2.0.8               | 17          |
@@ -41,7 +44,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 
 
-
+*Feature new image object.
 *Feature shadow in objects.
 
 ## Usage
@@ -172,6 +175,14 @@ If you have problems with go another page and return use after view init for ref
 
 **addGraphBars(ctx: CanvasRenderingContext2D, point: Point, width: number, values: number[], color: (string | CanvasGradient | CanvasPattern)[], distance: number)** Create graph bars.
 
+**addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
+
+sample code 
+```typescript
+let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
+await image.loadImageFromUrl('tapachica.png');
+  ```
+
 **addLineChart(point: Point, values: number[], dist: number, color : string| CanvasGradient | CanvasPattern,marks?:boolean): LineChartObject** Create a line for chart.
 
 **addAxisY(ctx: CanvasRenderingContext2D, point: Point, dist: number, steps: number, labels: string[], fontSize: number, angleGrades?: number, distance?: number,adjustLabel?:Point[])** Create a y axis.
@@ -198,11 +209,16 @@ If you have problems with go another page and return use after view init for ref
 
 **addArc(x: number, y: number, size: number, beginGrades: number, endGrades: number, color?: string| CanvasGradient | CanvasPattern, borderColor?: string| CanvasGradient | CanvasPattern,shadow?:boolean): ArcObject** Create a arc object
 
-**click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }** Return a array all objects are clicked with mouse order for ZOrder.
+**click(ctx: CanvasRenderingContext2D, event: MouseEvent):{ shape: ShapeObject, action: string }**
+** Return a array all objects are clicked with mouse order for ZOrder. **
 Possible events off object.
 const clickedObjects = ngGdService.click(ctx, event);
 console.log(clickedObjects);
-## ShapeObject type posibles values
+
+
+## ShapeObject posibles values in type
+**image**
+
 **label**
 
 **node**
@@ -225,9 +241,9 @@ console.log(clickedObjects);
 
 **candleStick**
 
-## inPoint Object are clicked event value.
+## inPoint Object are clicked action returned.
 
-### Line and connection private events values.
+### Line and connection private events action returned
 
 **inPointXY Object clicked in first point.**
 
@@ -391,7 +407,6 @@ use common in  hotlistenner read this sample code
     }
   }
   ```
-
 sources:(https://github.com/luisalejandrofigueredo/ng-gd)
 For help send email to:**luisalejandrofigueredo@gmail.com**
 or:[Likedin](http://www.linkedin.com/in/luis-figueredo-casadei)

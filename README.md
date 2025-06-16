@@ -32,6 +32,8 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 4.6.0               | 19.14       |
+| 4.4.8               | 19.14       |
 | 4.4.6               | 19.14       |
 | 4.4.4               | 19.14       |
 | 3.0.4               | 19.1.4      |
@@ -176,10 +178,10 @@ If you have problems with go another page and return use after view init for ref
 **addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean,angleLabel?:number,distanceLabel?:number,text?:string): ImageObject**
 
 sample code 
-
+```typescript
 let image:ImageObject=this.gd.addImage({x:100,y:100},100,100,'rgba(0, 0, 0,1)',true,0,0,'hola mundo');
 await image.loadImageFromUrl('tapachica.png');
-
+  ```
 
 **addLineChart(point: Point, values: number[], dist: number, color : string| CanvasGradient | CanvasPattern,marks?:boolean): LineChartObject** Create a line for chart.
 
