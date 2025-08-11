@@ -265,6 +265,8 @@ export class ConnectionObject extends ShapeObject {
       if (this.mirrorLabel === false) {
         if (this.arrow===true){
           this.labelObject.text=this.name+"\u2192";
+        } else {
+          this.labelObject.text=this.name;
         }
         this.labelObject.x=textPosition.x;
         this.labelObject.y=textPosition.y;
@@ -275,6 +277,8 @@ export class ConnectionObject extends ShapeObject {
       } else {
         if (this.arrow===true){
           this.labelObject.text="\u2190"+this.name;
+        } else {
+          this.labelObject.text=this.name;
         }
         this.labelObject.x=textPosition.x;
         this.labelObject.y=textPosition.y;

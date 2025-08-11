@@ -226,8 +226,8 @@ export class NgGdService {
     }
   }
 
-  addCollateral(from: Point, to: Point, node: Point) {
-    const newCollateral = new CollateralObject(from, to, node);
+  addCollateral(from: Point, to: Point, node: Point,color:string) {
+    const newCollateral = new CollateralObject(from, to, node,color);
     this.canvasObjects.push(<ShapeObject>newCollateral);
     return newCollateral;
   }

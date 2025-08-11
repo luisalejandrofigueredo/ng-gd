@@ -6,12 +6,13 @@ export class CollateralObject extends ShapeObject {
     private from: Point = { x: 0, y: 0 };
     private to: Point = { x: 0, y: 0 };
     private node: Point = { x: 0, y: 0 };
-    constructor(from: Point, to: Point, node: Point) {
+    constructor(from: Point, to: Point, node: Point,color: string) {
         super();
         this.type = 'collateral';
         this.from = from;
         this.to = to;
         this.node = node
+        this.color = color;
     }
 
     override drawShape(ctx: CanvasRenderingContext2D): void {
@@ -38,6 +39,7 @@ export class CollateralObject extends ShapeObject {
 
             const rect = rectangle(collateralPosition.x, collateralPosition.y, 2, dist, nodeAngle);
             ctx.beginPath();
+            ctx.fillStyle = this.color;
             ctx.moveTo(rect.first.x, rect.first.y);
             ctx.lineTo(rect.second.x, rect.second.y);
             ctx.lineTo(rect.third.x, rect.third.y);
