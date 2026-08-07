@@ -1,6 +1,6 @@
 {
   "name": "ng-gd",
-  "version": "4.6.0",
+  "version": "4.7.0",
   "license": "MIT",
   "author": {
     "name": "Luis Alejandro Figueredo Casadei",
@@ -15,13 +15,14 @@
     "Angular 17",
     "Angular 18",
     "Angular 19",
+    "Angular 22",
     "",
     "Dashboard",
     "Graphics"
   ],
   "peerDependencies": {
-    "@angular/common": "^19.1.4",
-    "@angular/core": "^19.1.4"
+    "@angular/common": "^22.1.0",
+    "@angular/core": "^22.1.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"

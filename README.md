@@ -32,6 +32,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 4.7.0               | 22          |
 | 4.6.0               | 19.14       |
 | 4.4.8               | 19.14       |
 | 4.4.6               | 19.14       |
