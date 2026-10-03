@@ -47,6 +47,13 @@ export class ConnectionObject extends ShapeObject {
   distance: number = 20;
   shape = 0;
   arrow=false;
+  /**
+   * Recorte en px desde el centro de cada nodo hasta donde arranca/termina
+   * la línea (por defecto 30, como en versiones anteriores). Permite que la
+   * conexión apoye en el borde cuando los nodos cambian de tamaño.
+   */
+  fromTrim: number = 30;
+  toTrim: number = 30;
   constructor(x: number, y: number, toX: number, toY: number, color?: string | CanvasGradient | CanvasPattern, name?: string, shadow?: boolean, zOrder?: number,arrow?:boolean) {
     super()
     this.x = x;
@@ -128,8 +135,8 @@ export class ConnectionObject extends ShapeObject {
       ctx.strokeStyle = this.BgColor;
       const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
       const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-      let moveNode = move(this.x, this.y, nodeAngle, 30);
-      let moveToNode = move(this.toX, this.toY, toNodeAngle, 30);
+      let moveNode = move(this.x, this.y, nodeAngle, this.fromTrim);
+      let moveToNode = move(this.toX, this.toY, toNodeAngle, this.toTrim);
       const dist = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
       const rect = rectangle(moveNode.x, moveNode.y, 2, dist, nodeAngle);
       ctx.beginPath();
@@ -175,8 +182,8 @@ export class ConnectionObject extends ShapeObject {
   override inPoint(x: number, y: number): boolean {
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
     const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), 30);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), 30);
+    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
+    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
     if (distance(x, y, moveNode.x, moveNode.y) <= 4) {
       return true;
     }
@@ -196,8 +203,8 @@ export class ConnectionObject extends ShapeObject {
   inRectangle(x: number, y: number): boolean {
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
     const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), 40);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), 40);
+    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
+    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
     const rectangleArea = rectangle(moveNode.x, moveNode.y, 2, distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y), nodeAngle)
     if (isPointInsideRectangle({ x: x, y: y }, rectangleArea.first, rectangleArea.second, rectangleArea.third, rectangleArea.forth)) {
       return true;
@@ -207,7 +214,7 @@ export class ConnectionObject extends ShapeObject {
 
   inPointXY(x: number, y: number): boolean {
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), 30);
+    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
     if (distance(x, y, moveNode.x, moveNode.y) <= 4) {
       return true;
     }
@@ -216,7 +223,7 @@ export class ConnectionObject extends ShapeObject {
 
   inPointToXY(x: number, y: number): boolean {
     const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), 30);
+    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
     if (distance(x, y, moveToNode.x, moveToNode.y) <= 4) {
       return true;
     }
@@ -240,8 +247,8 @@ export class ConnectionObject extends ShapeObject {
       ctx.strokeStyle = this.color;
       const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
       const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-      let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), 30);
-      let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), 30);
+      let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
+      let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
       const dist = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
       const rect = rectangle(moveNode.x, moveNode.y, 2, dist, nodeAngle);
       ctx.beginPath();
@@ -260,7 +267,7 @@ export class ConnectionObject extends ShapeObject {
         textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, this.distance);
       }
       else {
-        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, this.distance);
+        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, -this.distance);
       }
       if (this.mirrorLabel === false) {
         if (this.arrow===true){

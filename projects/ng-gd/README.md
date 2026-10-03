@@ -32,6 +32,9 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 5.0.0               | 22          |
+| 4.8.0               | 22          |
+| 4.7.2               | 22          |
 | 4.6.0               | 19.14       |
 | 4.4.8               | 19.14       |
 | 4.4.6               | 19.14       |
@@ -46,6 +49,21 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 *Feature new image object.
 *Feature shadow in objects.
+
+## 5.0.0 breaking changes
+
+* `ConnectionObject.drawShape` with `mirrorLabel` now places the label on the
+  mirrored side (it stayed on the same side before).
+* `ConnectionObject`/`LineObject` trim the line ends with `fromTrim`/`toTrim`
+  (default 30, as before). `inRectangle` now trims with the same values
+  instead of a fixed 40.
+* `MultiplesSidesObject.setRadius()` rebuilds the figure (setting `radius`
+  directly still does not redraw by itself).
+* `ImageObject.angleLabel`/`distanceLabel` are measured from the photo center
+  (`getCenter()`), not from the x,y anchor anymore: labels saved with older
+  versions need migration.
+* New: `NgGdService.addNode(..., radius?)`, `getGraphNodes()`,
+  `CollateralObject` and `trigonometrics` exports.
 
 ## Usage
 

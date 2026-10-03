@@ -37,6 +37,8 @@ export class NgGdService {
   }
 
   start(width: number, height: number) {
+    this.width = width;
+    this.height = height;
     if (this.canvasObjects.length === 0) {
       this.canvasObjects.push(new DocumentObject(width, height));
     } else {
@@ -69,6 +71,20 @@ export class NgGdService {
     let nodes: NodeObject[] = [];
     this.canvasObjects.forEach(element => {
       if (element instanceof NodeObject) {
+        nodes.push(element)
+      }
+    });
+    return nodes;
+  }
+
+  /**
+   * Todos los objetos que representan un nodo del grafo: círculos, fotos
+   * y polígonos. `getNodes()` se conserva sin cambios (solo círculos).
+   */
+  getGraphNodes(): (NodeObject | ImageObject | MultiplesSidesObject)[] {
+    let nodes: (NodeObject | ImageObject | MultiplesSidesObject)[] = [];
+    this.canvasObjects.forEach(element => {
+      if (element instanceof NodeObject || element instanceof ImageObject || element instanceof MultiplesSidesObject) {
         nodes.push(element)
       }
     });
@@ -371,8 +387,8 @@ export class NgGdService {
     return newImage
   }
 
-  addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern): NodeObject {
-    const newNode = new NodeObject(point.x, point.y, name, 20, description, net, angleLabel, distanceLabel, shadow, color);
+  addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern, radius?: number): NodeObject {
+    const newNode = new NodeObject(point.x, point.y, name, radius ?? 20, description, net, angleLabel, distanceLabel, shadow, color);
     this.canvasObjects.push((<ShapeObject>newNode));
     return newNode;
   }
@@ -505,7 +521,7 @@ export class NgGdService {
     return <LabelObject>{}
   }
 
-  findByName(text: string): ArcObject | CandlestickObject | CircleObject | ConnectionObject | LabelObject | LineChartObject | ShapeObject {
+  findByName(text: string): ArcObject | CandlestickObject | CircleObject | ConnectionObject | ImageObject | LabelObject | LineChartObject | MultiplesSidesObject | NodeObject | ShapeObject {
     for (let index = 0; index < this.canvasObjects.length; index++) {
       const element = this.canvasObjects[index];
       if (element.name === text) {

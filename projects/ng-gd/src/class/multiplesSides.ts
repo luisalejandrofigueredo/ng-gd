@@ -2,7 +2,7 @@ import { ElementRef } from '@angular/core';
 import { Point } from '../interfaces/point';
 import { move, isPointInTriangle, distance, angle, getTransformedPoint, toRadians } from '../trigonometrics';
 import { ShapeObject } from './shape-object'
-interface Triangle {
+export interface Triangle {
     p1: Point;
     p2: Point;
     p3: Point
@@ -45,12 +45,24 @@ export class MultiplesSidesObject extends ShapeObject {
         if (shadow) {
             this.shadow = shadow;
         }
+        this.buildTriangles();
+    }
+
+    /** Reconstruye los vértices desde la posición, lados, radio y ángulo actuales. */
+    private buildTriangles(): void {
+        this.triangles = [];
         const radian = 2 * Math.PI / this.sides;
         for (let i = 0; i < this.sides; i++) {
-            const secondPoint = move(x, y, i * radian + this.angle, this.radius);
-            const thirdPoint = move(x, y, i * radian + radian + this.angle, this.radius);
-            this.triangles.push({ p1: { x: x, y: y }, p2: secondPoint, p3: thirdPoint } as Triangle)
+            const secondPoint = move(this.x, this.y, i * radian + this.angle, this.radius);
+            const thirdPoint = move(this.x, this.y, i * radian + radian + this.angle, this.radius);
+            this.triangles.push({ p1: { x: this.x, y: this.y }, p2: secondPoint, p3: thirdPoint } as Triangle)
         }
+    }
+
+    /** Cambia el radio y regenera la figura (asignar `radius` solo no redibuja). */
+    setRadius(radius: number): void {
+        this.radius = radius;
+        this.buildTriangles();
     }
 
     override drawShape(ctx: CanvasRenderingContext2D): void {

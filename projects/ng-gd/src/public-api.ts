@@ -21,5 +21,7 @@ export * from './class/lineChartObject';
 export * from './class/Candlestick';
 export * from  './class/lineObject';
 export * from './class/image-object'
+export * from './class/collateral';
+export * from './trigonometrics';
 export * from './interfaces/point';
 export * from './interfaces/candle-stick '

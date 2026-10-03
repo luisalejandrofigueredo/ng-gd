@@ -3,9 +3,9 @@ import { ShapeObject } from "./shape-object";
 import { Point } from "../interfaces/point";
 import { angle, rectangle, distance, fillCircle, getNewParallelPoint, move } from "../trigonometrics";
 export class CollateralObject extends ShapeObject {
-    private from: Point = { x: 0, y: 0 };
-    private to: Point = { x: 0, y: 0 };
-    private node: Point = { x: 0, y: 0 };
+    from: Point = { x: 0, y: 0 };
+    to: Point = { x: 0, y: 0 };
+    node: Point = { x: 0, y: 0 };
     constructor(from: Point, to: Point, node: Point,color: string) {
         super();
         this.type = 'collateral';

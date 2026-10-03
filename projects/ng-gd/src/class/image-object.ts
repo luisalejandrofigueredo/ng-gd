@@ -1,6 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { ShapeObject } from './shape-object'
 import { angle, distance, getTransformedPoint, isPointInsideRectangle, move, offSet, rectangle, toDegrees, toRadians } from "../trigonometrics";
+import { Point } from "../interfaces/point";
 import { LabelObject } from "../class/label-object";
 export class ImageObject extends ShapeObject {
     angle = 0;
@@ -39,6 +40,16 @@ export class ImageObject extends ShapeObject {
         if (text) {
             this.labelObject.text = text;
         }
+    }
+
+    /**
+     * Centro de la foto (punto medio de la diagonal first↔third del rectángulo).
+     * Desde 5.0.0 `angleLabel`/`distanceLabel` se miden desde aquí
+     * (antes se medían desde el ancla x,y).
+     */
+    getCenter(): Point {
+        const rect = rectangle(this.x, this.y, this.height, this.width, this.angle);
+        return { x: (rect.first.x + rect.third.x) / 2, y: (rect.first.y + rect.third.y) / 2 };
     }
 
     async loadImageFromUrl(url: string): Promise<HTMLImageElement> {
@@ -91,7 +102,8 @@ export class ImageObject extends ShapeObject {
         ctx.rotate(imageAngle);
         ctx.drawImage(this.imageBuffer, centerX, centerY, this.width, this.height);
         ctx.rotate(-imageAngle);
-        const movePos = move(this.x, this.y, toRadians(this.angleLabel), this.distanceLabel);
+        const center = this.getCenter();
+        const movePos = move(center.x, center.y, toRadians(this.angleLabel), this.distanceLabel);
         this.labelObject.x = movePos.x;
         this.labelObject.y = movePos.y;
         this.labelObject.drawShape(ctx);
@@ -99,9 +111,10 @@ export class ImageObject extends ShapeObject {
 
     moveMouseText(ctx: CanvasRenderingContext2D, event: MouseEvent) {
         const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
+        const center = this.getCenter();
         this.labelObject.moveMouse(ctx, event)
-        this.distanceLabel = distance( this.x, this.y,this.labelObject.x, this.labelObject.y,);
-        this.angleLabel = toDegrees(angle( this.x, this.y,this.labelObject.x, this.labelObject.y));
+        this.distanceLabel = distance(center.x, center.y, this.labelObject.x, this.labelObject.y,);
+        this.angleLabel = toDegrees(angle(center.x, center.y, this.labelObject.x, this.labelObject.y));
         ShapeObject.lastMove = point;
     }
 
@@ -163,9 +176,10 @@ export class ImageObject extends ShapeObject {
     moveTouchText(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent) {
         const varOffSet = offSet(canvas, event);
         const point = getTransformedPoint(ctx, varOffSet.offSetX, varOffSet.offSetY);
+        const center = this.getCenter();
         this.labelObject.moveTouch(canvas, ctx, event)
-        this.distanceLabel = distance(this.x, this.y, this.labelObject.x, this.labelObject.y,);
-        this.angleLabel = toDegrees(angle(this.x, this.y, this.labelObject.x, this.labelObject.y));
+        this.distanceLabel = distance(center.x, center.y, this.labelObject.x, this.labelObject.y,);
+        this.angleLabel = toDegrees(angle(center.x, center.y, this.labelObject.x, this.labelObject.y));
         ShapeObject.lastMove = point;
     }
 }

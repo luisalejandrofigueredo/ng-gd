@@ -13,6 +13,12 @@ export class LineObject extends ShapeObject {
     toX: number;
     toY: number;
     steps: number = 0;
+    /**
+     * Recorte en px desde cada extremo para borrado y detección
+     * (por defecto 30, como en versiones anteriores).
+     */
+    fromTrim: number = 30;
+    toTrim: number = 30;
     constructor(x: number, y: number, toX: number, toY: number, steps?: number, color?: string | CanvasGradient | CanvasPattern, shadow?: boolean) {
         super();
         this.x = x;
@@ -75,8 +81,8 @@ export class LineObject extends ShapeObject {
         ctx.strokeStyle = this.BgColor;
         const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
         const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-        let moveNode = move(this.x, this.y, nodeAngle, 30);
-        let moveToNode = move(this.toX, this.toY, toNodeAngle, 30);
+        let moveNode = move(this.x, this.y, nodeAngle, this.fromTrim);
+        let moveToNode = move(this.toX, this.toY, toNodeAngle, this.toTrim);
         const dist = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
         const rect = rectangle(moveNode.x, moveNode.y, 2, dist, nodeAngle);
         ctx.beginPath();
@@ -84,15 +90,14 @@ export class LineObject extends ShapeObject {
         ctx.lineTo(rect.second.x, rect.second.y);
         ctx.lineTo(rect.third.x, rect.third.y);
         ctx.lineTo(rect.forth.x, rect.forth.y);
-        ctx.lineTo(rect.first.x, rect.first.y);
         ctx.closePath();
         ctx.fill();
     }
     override inPoint(x: number, y: number): boolean {
         const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
         const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-        let moveNode = move(this.x, this.y, nodeAngle, 30);
-        let moveToNode = move(this.toX, this.toY, toNodeAngle, 30);
+        let moveNode = move(this.x, this.y, nodeAngle, this.fromTrim);
+        let moveToNode = move(this.toX, this.toY, toNodeAngle, this.toTrim);
         if (distance(x, y, moveNode.x, moveNode.y) <= 4) {
             return true;
         }
@@ -122,8 +127,8 @@ export class LineObject extends ShapeObject {
     inRectangle(x: number, y: number): boolean {
         const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
         const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-        let moveNode = move(this.x, this.y, nodeAngle, 40);
-        let moveToNode = move(this.toX, this.toY, toNodeAngle, 40);
+        let moveNode = move(this.x, this.y, nodeAngle, this.fromTrim);
+        let moveToNode = move(this.toX, this.toY, toNodeAngle, this.toTrim);
         const rectangleArea = rectangle(moveNode.x, moveNode.y, 2, distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y), nodeAngle)
         if (isPointInsideRectangle({ x: x, y: y }, rectangleArea.first, rectangleArea.second, rectangleArea.third, rectangleArea.forth)) {
             return true;
