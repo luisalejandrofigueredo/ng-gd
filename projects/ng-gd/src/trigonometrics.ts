@@ -80,6 +80,12 @@ export function angle(x: number, y: number, xx: number, yy: number): number {
   return angleInRadians
 }
 
+/**
+ * Punto a `distanceToCentre` del inicio sobre el segmento y a
+ * `distanceParallel` al costado. Ojo: el costado no es perpendicular, sale
+ * a +60° (Math.PI / 3) del eje, así que la etiqueta también se corre un
+ * poco a lo largo de la línea al separarla.
+ */
 export function getNewParallelPoint(x: number, y: number, xx: number, yy: number, distanceToCentre: number, distanceParallel: number): Point {
   const anglePara = angle(x, y, xx, yy);
   const middlePoint = move(x, y, anglePara, distanceToCentre);

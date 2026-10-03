@@ -1,7 +1,14 @@
 import { ShapeObject } from "./shape-object";
 import { LabelObject } from "./label-object";
+import { Point } from "../interfaces/point";
 import { toRadians, angle, move, rectangle, distance, fillCircle, getNewParallelPoint, rotateText, isPointInsideRectangle, translateLineToNewPosition, getTransformedPoint, moveLineToPoint } from "../trigonometrics";
 import { ElementRef } from "@angular/core";
+/**
+ * Desvío en grados de los extremos recortados respecto al eje entre nodos
+ * (origen +4°, destino −4°): la línea dibujada, sus puntos de agarre y su
+ * área de selección no quedan exactamente sobre el eje, con un poco de aire.
+ */
+const ENDPOINT_SKEW_GRADES = 4;
 export class ConnectionObject extends ShapeObject {
   override moveTouch(canvas: ElementRef, ctx: CanvasRenderingContext2D, event: TouchEvent): void {
     const touch = event.touches[0];
@@ -90,6 +97,32 @@ export class ConnectionObject extends ShapeObject {
     return this.mirrorLabel;
   }
 
+  /**
+   * Extremos recortados de la línea, medidos con fromTrim/toTrim desde el
+   * centro de cada nodo. Con `skewed` se aplica el desvío de
+   * ENDPOINT_SKEW_GRADES (dibujo y testeo); sin él van sobre el eje.
+   */
+  getTrimmedEndpoints(skewed: boolean): { from: Point; to: Point } {
+    const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
+    const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
+    const skew = skewed ? ENDPOINT_SKEW_GRADES : 0;
+    return {
+      from: move(this.x, this.y, nodeAngle + toRadians(skew), this.fromTrim),
+      to: move(this.toX, this.toY, toNodeAngle + toRadians(-skew), this.toTrim),
+    };
+  }
+
+  /**
+   * Posición de la etiqueta sobre el segmento visible: punto medio más
+   * `align`, al costado `distance` (lado opuesto si está espejada).
+   */
+  getLabelPosition(): Point {
+    const ends = this.getTrimmedEndpoints(true);
+    const distPara = distance(ends.from.x, ends.from.y, ends.to.x, ends.to.y);
+    const parallel = this.mirrorLabel === false ? this.distance : -this.distance;
+    return getNewParallelPoint(ends.from.x, ends.from.y, ends.to.x, ends.to.y, distPara / 2 + this.align, parallel);
+  }
+
   override moveMouse(ctx: CanvasRenderingContext2D, event: MouseEvent) {
     const point = getTransformedPoint(ctx, event.offsetX, event.offsetY);
     this.move(point.x, point.y);
@@ -133,12 +166,10 @@ export class ConnectionObject extends ShapeObject {
     if (this.visible === true) {
       ctx.fillStyle = this.BgColor;
       ctx.strokeStyle = this.BgColor;
+      const ends = this.getTrimmedEndpoints(true);
       const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
-      const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-      let moveNode = move(this.x, this.y, nodeAngle, this.fromTrim);
-      let moveToNode = move(this.toX, this.toY, toNodeAngle, this.toTrim);
-      const dist = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      const rect = rectangle(moveNode.x, moveNode.y, 2, dist, nodeAngle);
+      const dist = distance(ends.from.x, ends.from.y, ends.to.x, ends.to.y);
+      const rect = rectangle(ends.from.x, ends.from.y, 2, dist, nodeAngle);
       ctx.beginPath();
       ctx.moveTo(rect.first.x, rect.first.y);
       ctx.lineTo(rect.second.x, rect.second.y);
@@ -146,21 +177,14 @@ export class ConnectionObject extends ShapeObject {
       ctx.lineTo(rect.forth.x, rect.forth.y);
       ctx.lineTo(rect.first.x, rect.first.y);
       ctx.fill();
-      fillCircle(ctx, moveNode.x, moveNode.y, 4, this.BgColor);
-      fillCircle(ctx, moveToNode.x, moveToNode.y, 4, this.BgColor);
-      const distPara = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      const angleC = angle(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      let textPosition = { x: 0, y: 0 }
+      fillCircle(ctx, ends.from.x, ends.from.y, 4, this.BgColor);
+      fillCircle(ctx, ends.to.x, ends.to.y, 4, this.BgColor);
+      const textPosition = this.getLabelPosition();
+      const angleC = angle(ends.from.x, ends.from.y, ends.to.x, ends.to.y);
       if (this.mirrorLabel === false) {
-        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, this.distance);
-      }
-      else {
-        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, - this.distance);
-      }
-      if (this.mirrorLabel === false) {
-        rotateText(ctx, this.name + 'U+1F51D', textPosition.x, textPosition.y, angleC, "#000000", 60);
+        rotateText(ctx, this.name + 'U+1F51D', textPosition.x, textPosition.y, angleC, this.BgColor, 16);
       } else {
-        rotateText(ctx, this.name + 'U+1F51D', textPosition.x, textPosition.y, angleC + Math.PI, "#000000", 16);
+        rotateText(ctx, this.name + 'U+1F51D', textPosition.x, textPosition.y, angleC + Math.PI, this.BgColor, 16);
       }
     }
   }
@@ -180,17 +204,15 @@ export class ConnectionObject extends ShapeObject {
   }
 
   override inPoint(x: number, y: number): boolean {
+    const ends = this.getTrimmedEndpoints(true);
+    if (distance(x, y, ends.from.x, ends.from.y) <= 4) {
+      return true;
+    }
+    if (distance(x, y, ends.to.x, ends.to.y) <= 4) {
+      return true;
+    }
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
-    const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
-    if (distance(x, y, moveNode.x, moveNode.y) <= 4) {
-      return true;
-    }
-    if (distance(x, y, moveToNode.x, moveToNode.y) <= 4) {
-      return true;
-    }
-    const rectangleArea = rectangle(moveNode.x, moveNode.y, 2, distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y), nodeAngle)
+    const rectangleArea = rectangle(ends.from.x, ends.from.y, 2, distance(ends.from.x, ends.from.y, ends.to.x, ends.to.y), nodeAngle)
     if (isPointInsideRectangle({ x: x, y: y }, rectangleArea.first, rectangleArea.second, rectangleArea.third, rectangleArea.forth)) {
       return true
     }
@@ -203,8 +225,8 @@ export class ConnectionObject extends ShapeObject {
   inRectangle(x: number, y: number): boolean {
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
     const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
+    let moveNode = move(this.x, this.y, nodeAngle + toRadians(ENDPOINT_SKEW_GRADES), this.fromTrim);
+    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-ENDPOINT_SKEW_GRADES), this.toTrim);
     const rectangleArea = rectangle(moveNode.x, moveNode.y, 2, distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y), nodeAngle)
     if (isPointInsideRectangle({ x: x, y: y }, rectangleArea.first, rectangleArea.second, rectangleArea.third, rectangleArea.forth)) {
       return true;
@@ -214,7 +236,7 @@ export class ConnectionObject extends ShapeObject {
 
   inPointXY(x: number, y: number): boolean {
     const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
-    let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
+    let moveNode = move(this.x, this.y, nodeAngle + toRadians(ENDPOINT_SKEW_GRADES), this.fromTrim);
     if (distance(x, y, moveNode.x, moveNode.y) <= 4) {
       return true;
     }
@@ -223,7 +245,7 @@ export class ConnectionObject extends ShapeObject {
 
   inPointToXY(x: number, y: number): boolean {
     const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
+    let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-ENDPOINT_SKEW_GRADES), this.toTrim);
     if (distance(x, y, moveToNode.x, moveToNode.y) <= 4) {
       return true;
     }
@@ -232,25 +254,13 @@ export class ConnectionObject extends ShapeObject {
 
   override drawShape(ctx: CanvasRenderingContext2D): void {
     if (this.visible === true) {
-      if (this.shadow === true) {
-        ctx.shadowColor = ShapeObject.shadowColor;
-        ctx.shadowBlur = 6;
-        ctx.shadowOffsetX = 6;
-        ctx.shadowOffsetY = 6;
-      } else {
-        ctx.shadowBlur = 0;
-        ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-      }
+      this.applyShadow(ctx);
       ctx.fillStyle = this.color;
       ctx.strokeStyle = this.color;
+      const ends = this.getTrimmedEndpoints(true);
       const nodeAngle = angle(this.x, this.y, this.toX, this.toY);
-      const toNodeAngle = angle(this.toX, this.toY, this.x, this.y);
-      let moveNode = move(this.x, this.y, nodeAngle + toRadians(4), this.fromTrim);
-      let moveToNode = move(this.toX, this.toY, toNodeAngle + toRadians(-4), this.toTrim);
-      const dist = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      const rect = rectangle(moveNode.x, moveNode.y, 2, dist, nodeAngle);
+      const dist = distance(ends.from.x, ends.from.y, ends.to.x, ends.to.y);
+      const rect = rectangle(ends.from.x, ends.from.y, 2, dist, nodeAngle);
       ctx.beginPath();
       ctx.moveTo(rect.first.x, rect.first.y);
       ctx.lineTo(rect.second.x, rect.second.y);
@@ -258,17 +268,10 @@ export class ConnectionObject extends ShapeObject {
       ctx.lineTo(rect.forth.x, rect.forth.y);
       ctx.lineTo(rect.first.x, rect.first.y);
       ctx.fill();
-      fillCircle(ctx, moveNode.x, moveNode.y, 4, this.color);
-      fillCircle(ctx, moveToNode.x, moveToNode.y, 4, this.color);
-      const distPara = distance(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      const angleC = angle(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y);
-      let textPosition = { x: 0, y: 0 }
-      if (this.mirrorLabel === false) {
-        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, this.distance);
-      }
-      else {
-        textPosition = getNewParallelPoint(moveNode.x, moveNode.y, moveToNode.x, moveToNode.y, distPara / 2 + this.align, -this.distance);
-      }
+      fillCircle(ctx, ends.from.x, ends.from.y, 4, this.color);
+      fillCircle(ctx, ends.to.x, ends.to.y, 4, this.color);
+      const angleC = angle(ends.from.x, ends.from.y, ends.to.x, ends.to.y);
+      const textPosition = this.getLabelPosition();
       if (this.mirrorLabel === false) {
         if (this.arrow===true){
           this.labelObject.text=this.name+"\u2192";

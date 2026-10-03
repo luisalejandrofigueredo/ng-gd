@@ -10,6 +10,10 @@ export abstract class ShapeObject implements CommonProperties {
   public static height = 0;
   public static lastMove:Point={x:0,y:0};
   public static shadowColor:string="#ffffff";
+  /** Sombra estándar de la librería. */
+  public static readonly SHADOW_BLUR = 6;
+  public static readonly SHADOW_OFFSET = 6;
+  public static readonly SHADOW_OFF_COLOR = 'rgba(0, 0, 0, 0)';
   id: number = 0;
   x = 0;
   y = 0;
@@ -113,6 +117,21 @@ export abstract class ShapeObject implements CommonProperties {
 
   resetMouse(){
     ShapeObject.lastMove={x:0,y:0};
+  }
+
+  /** Aplica la sombra estándar al contexto, o la apaga si la figura no la usa. */
+  protected applyShadow(ctx: CanvasRenderingContext2D): void {
+    if (this.shadow === true) {
+      ctx.shadowColor = ShapeObject.shadowColor;
+      ctx.shadowBlur = ShapeObject.SHADOW_BLUR;
+      ctx.shadowOffsetX = ShapeObject.SHADOW_OFFSET;
+      ctx.shadowOffsetY = ShapeObject.SHADOW_OFFSET;
+    } else {
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = ShapeObject.SHADOW_OFF_COLOR;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
   }
   
   static resetIds() {

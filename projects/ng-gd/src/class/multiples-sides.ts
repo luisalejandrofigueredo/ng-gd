@@ -67,17 +67,7 @@ export class MultiplesSidesObject extends ShapeObject {
 
     override drawShape(ctx: CanvasRenderingContext2D): void {
         if (this.visible === true) {
-            if (this.shadow === true) {
-                ctx.shadowColor = ShapeObject.shadowColor;
-                ctx.shadowBlur = 6;
-                ctx.shadowOffsetX = 6;
-                ctx.shadowOffsetY = 6;
-            } else {
-                ctx.shadowBlur = 0;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
-            }
+            this.applyShadow(ctx);
             ctx.beginPath();
             ctx.fillStyle = this.color;
             ctx.strokeStyle = this.borderColor;

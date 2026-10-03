@@ -32,6 +32,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 5.1.0               | 22          |
 | 5.0.0               | 22          |
 | 4.8.0               | 22          |
 | 4.7.2               | 22          |
@@ -49,6 +50,28 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 *Feature new image object.
 *Feature shadow in objects.
+
+## 5.1.0 readability release (no breaking changes)
+
+* `NgGdService.addNode/addImage/addMultiplesSides/addConnection` accept an
+  options object as alternative to positional parameters:
+  ```typescript
+  gd.addNode({ point: { x: 100, y: 100 }, name: 'Nodo', radius: 30 });
+  gd.addConnection({ point: { x: 0, y: 0 }, toPoint: { x: 50, y: 50 }, label: 'une' });
+  ```
+  (types `AddNodeOptions`, `AddImageOptions`, `AddPolygonOptions`,
+  `AddConnectionOptions` from `'ng-gd'`).
+* `ConnectionObject.getTrimmedEndpoints(skewed)` and `getLabelPosition()`:
+  single place for line-end trimming and label placement (used by draw,
+  erase and hit testing).
+* `ShapeObject.applyShadow(ctx)`: the standard shadow block, previously
+  copy-pasted in 13 classes.
+* Source files renamed to kebab-case (`line-object.ts`, `multiples-sides.ts`,
+  …) and `candle-stick .ts` lost its trailing space. Public class names
+  did not change.
+* `vitest` suite for the pure geometry helpers: `npm test`.
+* Fixes: `inverseShape` erases with the background color (it painted the
+  label black) and at the drawn position (it was 4° off).
 
 ## 5.0.0 breaking changes
 

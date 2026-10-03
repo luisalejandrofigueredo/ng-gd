@@ -6,21 +6,22 @@ import { ConnectionObject } from '../class/connection-object';
 import { LabelObject } from '../class/label-object';
 import { angle, convertArray, distance, getTransformedPoint, map, move, toDegrees, toRadians } from '../trigonometrics';
 import { DocumentObject, LineObject } from '../public-api';
-import { RectangleObject } from '../class/rectangleObject';
+import { RectangleObject } from '../class/rectangle-object';
 import { ImageObject } from "../class/image-object";
-import { CircleObject } from '../class/circleObject';
-import { TriangleObject } from '../class/triangleObject';
-import { MultiplesSidesObject } from '../class/multiplesSides';
-import { ArcObject } from '../class/arcObject'
-import { LineChartObject } from '../class/lineChartObject'
-import { Candlestick } from "../interfaces/candle-stick ";
-import { CandlestickObject } from "../class/Candlestick";
+import { CircleObject } from '../class/circle-object';
+import { TriangleObject } from '../class/triangle-object';
+import { MultiplesSidesObject } from '../class/multiples-sides';
+import { ArcObject } from '../class/arc-object'
+import { LineChartObject } from '../class/line-chart-object'
+import { Candlestick } from "../interfaces/candle-stick";
+import { CandlestickObject } from "../class/candlestick";
 import { CollateralObject } from '../class/collateral';
+import { AddConnectionOptions, AddImageOptions, AddNodeOptions, AddPolygonOptions } from '../interfaces/graph-options';
 @Injectable({
   providedIn: 'root'
 })
 export class NgGdService {
-  canvasObjects: any[] = [];
+  canvasObjects: ShapeObject[] = [];
   width = 800;
   height = 600;
   bkColor: string = "#000000";
@@ -357,9 +358,14 @@ export class NgGdService {
     return newArc;
   }
 
-  addMultiplesSides(point: Point, sides: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, angle?: number, shadow?: boolean): MultiplesSidesObject {
-    const newMultiplesSides = new MultiplesSidesObject(point.x, point.y, sides, radius, color, borderColor, angle, shadow);
-    this.canvasObjects.push(<ShapeObject>newMultiplesSides);
+  addMultiplesSides(point: Point, sides: number, radius: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, angle?: number, shadow?: boolean): MultiplesSidesObject;
+  addMultiplesSides(options: AddPolygonOptions): MultiplesSidesObject;
+  addMultiplesSides(first: Point | AddPolygonOptions, sides?: number, radius?: number, color?: string | CanvasGradient | CanvasPattern, borderColor?: string | CanvasGradient | CanvasPattern, angle?: number, shadow?: boolean): MultiplesSidesObject {
+    const opts: AddPolygonOptions = 'x' in first
+      ? { point: first, sides: sides ?? 0, radius: radius ?? 0, color, borderColor, angle, shadow }
+      : first;
+    const newMultiplesSides = new MultiplesSidesObject(opts.point.x, opts.point.y, opts.sides, opts.radius, opts.color, opts.borderColor, opts.angle, opts.shadow);
+    this.canvasObjects.push((<ShapeObject>newMultiplesSides));
     return newMultiplesSides;
   }
 
@@ -381,20 +387,35 @@ export class NgGdService {
     return newRectangle
   }
 
-  addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string): ImageObject {
-    const newImage = new ImageObject(point.x, point.y, width, height, borderColor, shadow, angleLabel, distanceLabel, text);
+  addImage(point: Point, width: number, height: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string): ImageObject;
+  addImage(options: AddImageOptions): ImageObject;
+  addImage(first: Point | AddImageOptions, width?: number, height?: number, borderColor?: string | CanvasGradient | CanvasPattern, shadow?: boolean, angleLabel?: number, distanceLabel?: number, text?: string): ImageObject {
+    const opts: AddImageOptions = 'x' in first
+      ? { point: first, width: width ?? 0, height: height ?? 0, borderColor, shadow, angleLabel, distanceLabel, text }
+      : first;
+    const newImage = new ImageObject(opts.point.x, opts.point.y, opts.width, opts.height, opts.borderColor, opts.shadow, opts.angleLabel, opts.distanceLabel, opts.text);
     this.canvasObjects.push((<ShapeObject>newImage));
     return newImage
   }
 
-  addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern, radius?: number): NodeObject {
-    const newNode = new NodeObject(point.x, point.y, name, radius ?? 20, description, net, angleLabel, distanceLabel, shadow, color);
+  addNode(point: Point, name: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern, radius?: number): NodeObject;
+  addNode(options: AddNodeOptions): NodeObject;
+  addNode(first: Point | AddNodeOptions, name?: string, description?: string, net?: boolean, angleLabel?: number, distanceLabel?: number, shadow?: boolean, color?: string | CanvasGradient | CanvasPattern, radius?: number): NodeObject {
+    const opts: AddNodeOptions = 'x' in first
+      ? { point: first, name: name ?? '', description, net, angleLabel, distanceLabel, shadow, color, radius }
+      : first;
+    const newNode = new NodeObject(opts.point.x, opts.point.y, opts.name, opts.radius ?? 20, opts.description, opts.net, opts.angleLabel, opts.distanceLabel, opts.shadow, opts.color);
     this.canvasObjects.push((<ShapeObject>newNode));
     return newNode;
   }
 
-  addConnection(point: Point, toPoint: Point, color?: string | CanvasGradient | CanvasPattern, label?: string, shadow?: boolean, zOrder?: number): ConnectionObject {
-    let newConnection = new ConnectionObject(point.x, point.y, toPoint.x, toPoint.y, color, label, shadow, zOrder);
+  addConnection(point: Point, toPoint: Point, color?: string | CanvasGradient | CanvasPattern, label?: string, shadow?: boolean, zOrder?: number): ConnectionObject;
+  addConnection(options: AddConnectionOptions): ConnectionObject;
+  addConnection(first: Point | AddConnectionOptions, toPoint?: Point, color?: string | CanvasGradient | CanvasPattern, label?: string, shadow?: boolean, zOrder?: number): ConnectionObject {
+    const opts: AddConnectionOptions = 'x' in first
+      ? { point: first, toPoint: toPoint ?? { x: 0, y: 0 }, color, label, shadow, zOrder }
+      : first;
+    let newConnection = new ConnectionObject(opts.point.x, opts.point.y, opts.toPoint.x, opts.toPoint.y, opts.color, opts.label, opts.shadow, opts.zOrder);
     newConnection.BgColor = this.bkColor;
     newConnection.FgColor = this.frColor
     this.canvasObjects.push((<ShapeObject>newConnection));
@@ -513,8 +534,8 @@ export class NgGdService {
   findLabelByText(text: string): LabelObject {
     for (let index = 0; index < this.canvasObjects.length; index++) {
       const element = this.canvasObjects[index];
-      if (element.type === 'label' && element.text === text) {
-        return element as LabelObject
+      if (element instanceof LabelObject && element.text === text) {
+        return element
       }
     }
     console.log('Error no find label:', text);

@@ -22,9 +22,6 @@ export class ImageObject extends ShapeObject {
         this.y = y;
         this.width = width;
         this.height = height;
-        if (typeof angle === "number") {
-            this.angle = angle;
-        }
         if (borderColor) {
             this.borderColor = borderColor;
         }
@@ -73,17 +70,7 @@ export class ImageObject extends ShapeObject {
 }
 
     override drawShape(ctx: CanvasRenderingContext2D): void {
-        if (this.shadow === true) {
-            ctx.shadowColor = ShapeObject.shadowColor;
-            ctx.shadowBlur = 6;
-            ctx.shadowOffsetX = 6;
-            ctx.shadowOffsetY = 6;
-        } else {
-            ctx.shadowBlur = 0;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-        }
+        this.applyShadow(ctx);
         const rect = rectangle(this.x, this.y, this.height, this.width, this.angle);
         ctx.fillStyle = this.color;
         ctx.strokeStyle = this.borderColor;

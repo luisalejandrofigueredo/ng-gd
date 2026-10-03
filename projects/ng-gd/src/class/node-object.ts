@@ -102,17 +102,7 @@ export class NodeObject extends ShapeObject {
             ctx.font = "16px Arial"
             ctx.fillStyle = this.FgColor;
             ctx.strokeStyle = this.FgColor;
-            if (this.shadow === true) {
-                ctx.shadowColor = ShapeObject.shadowColor;
-                ctx.shadowBlur = 6;
-                ctx.shadowOffsetX = 6;
-                ctx.shadowOffsetY = 6;
-            } else {
-                ctx.shadowBlur = 0;
-                ctx.shadowColor = 'rgba(0, 0, 0, 0)';
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
-            }
+            this.applyShadow(ctx);
             fillCircle(ctx, this.x, this.y, this.radius, this.color);
             this.labelObject.x = movePos.x;
             this.labelObject.y = movePos.y;
