@@ -27,6 +27,12 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 🖥️ Optimized for mouse and tablet interactions.
 
+> **BETA (5.2.0):** declarative `<graph-view [options]>` for
+> `line | bars | pie | candles` charts (standalone, no manual canvas needed).
+> Experimental — may change; the `NgGdService` API stays stable.
+> See the published README (`projects/ng-gd/README.md`) for the full beta docs
+> and `example/` for a demo page ready for StackBlitz.
+
 
 ## Versions
 

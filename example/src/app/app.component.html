@@ -1,0 +1,48 @@
+<main class="page">
+  <header>
+    <h1>ng-gd · Declarative charts demo</h1>
+    <p>
+      Each chart is a <code>&lt;graph-view [options]&gt;</code> (standalone component).
+      No manual <code>canvas</code>, no <code>ctx</code>, no service calls.
+    </p>
+    <div class="toolbar">
+      <button type="button" (click)="toggleDarkMode()">
+        {{ darkMode ? '☀️ Switch to light mode' : '🌙 Switch to dark mode' }}
+      </button>
+      <span class="click-info">{{ lastClick }}</span>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2>1 · Line <small>kind: 'line'</small></h2>
+    <graph-view [options]="line" (graphClick)="onGraphClick($event)"></graph-view>
+    <pre>{{ line | json }}</pre>
+  </section>
+
+  <section class="card">
+    <h2>2 · Bars <small>kind: 'bars'</small></h2>
+    <graph-view [options]="bars" (graphClick)="onGraphClick($event)"></graph-view>
+    <pre>{{ bars | json }}</pre>
+  </section>
+
+  <section class="card">
+    <h2>3 · Pie <small>kind: 'pie' (values in degrees, adding up to 360)</small></h2>
+    <graph-view [options]="pie" (graphClick)="onGraphClick($event)"></graph-view>
+    <pre>{{ pie | json }}</pre>
+  </section>
+
+  <section class="card">
+    <h2>4 · Candles <small>kind: 'candles'</small></h2>
+    <graph-view [options]="candles" (graphClick)="onGraphClick($event)"></graph-view>
+    <pre>{{ candles | json }}</pre>
+  </section>
+
+  <footer>
+    <p>
+      For the classic imperative style (nodes, connections, drag &amp; drop),
+      inject <code>NgGdService</code> as shown in the main <code>README</code>.
+      Both styles coexist in the same app: the declarative one uses its own
+      service instance.
+    </p>
+  </footer>
+</main>

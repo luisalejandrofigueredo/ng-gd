@@ -32,6 +32,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 5.2.0               | 22          |
 | 5.1.0               | 22          |
 | 5.0.0               | 22          |
 | 4.8.0               | 22          |
@@ -50,6 +51,46 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 *Feature new image object.
 *Feature shadow in objects.
+
+## 5.2.0 beta: declarative `<graph-view>` (experimental)
+
+> **BETA:** `GraphViewComponent` (`<graph-view>` / `<gd-graph-view>`) and
+> `GraphViewOptions` are experimental and **may change in future releases**
+> outside the stable breaking-change cycle. The imperative `NgGdService`
+> API below remains the stable one.
+
+Standalone component, no manual `canvas`/`ctx` needed:
+
+```typescript
+import { Component } from '@angular/core';
+import { GraphViewComponent, GraphViewOptions } from 'ng-gd';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [GraphViewComponent],
+  template: `<graph-view [options]="chart"></graph-view>`,
+})
+export class AppComponent {
+  chart: GraphViewOptions = {
+    kind: 'line', // 'line' | 'bars' | 'pie' | 'candles'
+    values: [30, 90, 60, 140],
+    color: '#2ecc71',
+    marks: true,
+    showAxisY: true,
+    yLabels: ['0', '50', '100', '150'],
+  };
+}
+```
+
+* `kind: 'line' | 'bars' | 'pie' | 'candles'`. Pie values are **degrees**
+  and must total 360 (as in `addPieChart`).
+* To update, assign a **new** options object (`{ ...this.chart, darkMode: true }`);
+  mutating the old one does not redraw.
+* `(graphClick)` emits the `NgGdService.click()` hits; the `api` getter
+  exposes the scoped service instance for zoom/move.
+* Full demo page (4 charts, dark mode, clicks) in `example/`:
+  copy its 4 files into an Angular starter to publish a live demo.
 
 ## 5.1.0 readability release (no breaking changes)
 

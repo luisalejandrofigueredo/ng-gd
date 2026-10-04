@@ -6,6 +6,7 @@ import { from } from 'rxjs';
 
 export * from './lib/ng-gd.service';
 export * from './lib/ng-gd.component';
+export * from './lib/graph-view.component';
 export * from './lib/ng-gd.module';
 export * from './class/connection-object';
 export * from './class/label-object';
@@ -25,4 +26,5 @@ export * from './class/collateral';
 export * from './trigonometrics';
 export * from './interfaces/point';
 export * from './interfaces/graph-options';
+export * from './interfaces/graph-view-options';
 export * from './interfaces/candle-stick';
