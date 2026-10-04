@@ -30,8 +30,9 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 > **BETA (5.2.0):** declarative `<graph-view [options]>` for
 > `line | bars | pie | candles` charts (standalone, no manual canvas needed).
 > Experimental — may change; the `NgGdService` API stays stable.
+> Live demo: https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo
 > See the published README (`projects/ng-gd/README.md`) for the full beta docs
-> and `example/` for a demo page ready for StackBlitz.
+> and `example/` for the demo source.
 
 
 ## Versions
@@ -125,6 +126,8 @@ If you have problems with go another page and return use after view init for ref
 [Demo objects in stackblitz](https://stackblitz.com/edit/angular-ngdemo?file=src%2Fmain.ts)
 
 [Demo charts in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics?file=src%2Fmain.ts)
+
+[Demo declarative charts `<graph-view>` in stackblitz (beta)](https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo)
 
 [Demo chart with map function in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics-tz8cjy?file=src%2Fmain.ts)
 

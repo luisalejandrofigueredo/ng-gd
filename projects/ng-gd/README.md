@@ -89,8 +89,9 @@ export class AppComponent {
   mutating the old one does not redraw.
 * `(graphClick)` emits the `NgGdService.click()` hits; the `api` getter
   exposes the scoped service instance for zoom/move.
-* Full demo page (4 charts, dark mode, clicks) in `example/`:
-  copy its 4 files into an Angular starter to publish a live demo.
+* Full demo page (4 charts, dark mode, clicks) in `example/`.
+* **Live declarative demo (beta):**
+  https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo
 
 ## 5.1.0 readability release (no breaking changes)
 
@@ -200,6 +201,8 @@ If you have problems with go another page and return use after view init for ref
 [Demo objects in stackblitz](https://stackblitz.com/edit/angular-ngdemo?file=src%2Fmain.ts)
 
 [Demo charts in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics?file=src%2Fmain.ts)
+
+[Demo declarative charts `<graph-view>` in stackblitz (beta)](https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo)
 
 [Demo chart with map function in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics-tz8cjy?file=src%2Fmain.ts)
 
