@@ -1,5 +1,10 @@
 # Demo: declarative charts page (`<graph-view>`)
 
+**Open it live:** https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo
+(demo repo: https://github.com/luisalejandrofigueredo/ng-gd-demo — this
+`example/` folder is its canonical source; if you change it here, mirror it
+there).
+
 Standalone Angular 22 app showcasing all 4 chart types (`line`, `bars`,
 `pie`, `candles`), with a dark-mode toggle and click detection. It consumes
 the published `ng-gd` package (5.2.0+, where `<graph-view>` ships in beta),
