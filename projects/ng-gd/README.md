@@ -32,6 +32,7 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 
 | **Library version** | **Angular** |
 | ------------------- | ----------- |
+| 5.2.1               | 22          |
 | 5.2.0               | 22          |
 | 5.1.0               | 22          |
 | 5.0.0               | 22          |
@@ -52,12 +53,11 @@ After building your library with `ng build ng-gd`, go to the dist folder `cd dis
 *Feature new image object.
 *Feature shadow in objects.
 
-## 5.2.0 beta: declarative `<graph-view>` (experimental)
+## 5.2.x: declarative `<graph-view>` (stable since 5.2.1)
 
-> **BETA:** `GraphViewComponent` (`<graph-view>` / `<gd-graph-view>`) and
-> `GraphViewOptions` are experimental and **may change in future releases**
-> outside the stable breaking-change cycle. The imperative `NgGdService`
-> API below remains the stable one.
+`GraphViewComponent` (`<graph-view>` / `<gd-graph-view>`) and
+`GraphViewOptions` are stable. The imperative `NgGdService`
+API below remains available and both styles can coexist.
 
 Standalone component, no manual `canvas`/`ctx` needed:
 
@@ -90,7 +90,7 @@ export class AppComponent {
 * `(graphClick)` emits the `NgGdService.click()` hits; the `api` getter
   exposes the scoped service instance for zoom/move.
 * Full demo page (4 charts, dark mode, clicks) in `example/`.
-* **Live declarative demo (beta):**
+* **Live declarative demo:**
   https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo
 
 ## 5.1.0 readability release (no breaking changes)
@@ -202,7 +202,7 @@ If you have problems with go another page and return use after view init for ref
 
 [Demo charts in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics?file=src%2Fmain.ts)
 
-[Demo declarative charts `<graph-view>` in stackblitz (beta)](https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo)
+[Demo declarative charts `<graph-view>` in stackblitz](https://stackblitz.com/github/luisalejandrofigueredo/ng-gd-demo)
 
 [Demo chart with map function in stackblitz](https://stackblitz.com/edit/angular-ng-demo-graphics-tz8cjy?file=src%2Fmain.ts)
 

@@ -7,7 +7,7 @@ there).
 
 Standalone Angular 22 app showcasing all 4 chart types (`line`, `bars`,
 `pie`, `candles`), with a dark-mode toggle and click detection. It consumes
-the published `ng-gd` package (5.2.0+, where `<graph-view>` ships in beta),
+the published `ng-gd` package (5.2.0+, where `<graph-view>` ships as stable),
 so this folder is a complete project: `npm install`, `npm start`, done.
 
 ## Run it locally

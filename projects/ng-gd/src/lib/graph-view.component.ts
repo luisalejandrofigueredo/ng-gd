@@ -21,10 +21,6 @@ import {
 /**
  * Declarative chart view on top of `NgGdService`.
  *
- * @beta This API is experimental and may change in future releases
- * outside the stable API breaking-change cycle.
- * The imperative `NgGdService` API remains the stable one.
- *
  * Usage:
  * ```html
  * <graph-view [options]="{ kind: 'line', values: [10, 40, 25] }"></graph-view>

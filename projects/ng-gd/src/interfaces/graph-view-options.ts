@@ -9,7 +9,6 @@ export type GraphColor = string | CanvasGradient | CanvasPattern;
 /**
  * Declarative configuration of `<graph-view>`.
  *
- * @beta Experimental API: it may change in future releases.
  * Thin adapter: every field ends up delegating 1:1 to the existing
  * `NgGdService` methods (`addLineChart`, `addGraphBars`, `addPieChart`,
  * `addCandleChart`, `addAxisX`/`addAxisY`). It does not change the geometry.
