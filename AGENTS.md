@@ -20,7 +20,7 @@ Angular canvas library (`ng-gd`). Library-only repo: no app, no demo, no CI, no 
 
 ## Gotchas
 
-- `NgGdService.start(width, height)` must be called first; it creates/resizes the index-0 `DocumentObject` backing the canvas. Tests/consumers that skip it operate on an empty object list.
+- `NgGdService.start(width, height)` must be called first; it creates/resizes the `DocumentObject` backing the canvas (looked up by type since 5.2.2 — ids are global across instances, so never assume id 0). Tests/consumers that skip it operate on an empty object list.
 - `rectangle(x, y, height, width, angle)` takes **height before width** (see `trigonometrics.spec.ts`). Don't "fix" the order — callers depend on it.
 - `getNewParallelPoint(...)` offsets at **+60° (`Math.PI/3`)**, not perpendicular; label offsets also drift along the line. This is documented/tested behavior.
 - Strict TS is on (`strict`, `noImplicitOverride`, `noImplicitReturns`, `noFallthroughCasesInSwitch`, `moduleResolution: bundler`, `target/module ES2022`). Keep new code compliant.

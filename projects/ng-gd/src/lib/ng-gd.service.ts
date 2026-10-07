@@ -40,11 +40,19 @@ export class NgGdService {
   start(width: number, height: number) {
     this.width = width;
     this.height = height;
-    if (this.canvasObjects.length === 0) {
+    // El Document se busca por tipo, no por id 0: los ids son globales
+    // (ShapeObject.maxId) y otra instancia puede haberlos consumido antes.
+    const document = this.canvasObjects.find(this.findDocument);
+    if (document === undefined) {
       this.canvasObjects.push(new DocumentObject(width, height));
     } else {
-      (this.getItem(0) as unknown as DocumentObject).setSize(width, height);
+      (document as DocumentObject).setSize(width, height);
     }
+  }
+
+  /** Document de esta instancia (si ya hubo un start). */
+  private documentObject(): DocumentObject | undefined {
+    return this.canvasObjects.find(this.findDocument) as DocumentObject | undefined;
   }
 
   getLabels(): LabelObject[] {
@@ -200,17 +208,25 @@ export class NgGdService {
   setDarkMode() {
     this.bkColor = "#000000";
     this.frColor = "#ffffff";
-    this.getItem(0).BgColor = this.bkColor;
-    this.getItem(0).FgColor = this.frColor;
-    this.getItem(0).shadowColor = this.frColor;
+    const document = this.documentObject();
+    if (document === undefined) {
+      return;
+    }
+    document.BgColor = this.bkColor;
+    document.FgColor = this.frColor;
+    document.shadowColor = this.frColor;
   }
 
   setLightMode() {
     this.bkColor = "#ffffff";
     this.frColor = "#000000";
-    this.getItem(0).BgColor = this.bkColor;
-    this.getItem(0).FgColor = this.frColor;
-    this.getItem(0).shadowColor = this.frColor;
+    const document = this.documentObject();
+    if (document === undefined) {
+      return;
+    }
+    document.BgColor = this.bkColor;
+    document.FgColor = this.frColor;
+    document.shadowColor = this.frColor;
   }
 
   canvasSetSize(width: number, height: number) {
